@@ -1,0 +1,11 @@
+Roomy House version alpha - Todo list
+------------------------------------------------
+
+1) Présence d'un menu de jeu
+
+2)		Mise en place de scripts essentiel au personnage (déplacements, attaque de base [lancer de projectiles] et ramassage
+des boules lumineuses (pas encore de gestion des bonus selon le nombre de boules ramassées) et gestion de la lumière
+autour du personnage (sachant que le jeu est dans l'ombre au début et qu'il faut amasser des boules jaunes afin d'intensifier
+l'aura de lumière autour du personnage)
+
+3)		Modélisation presque totale d'un niveau de jeu (la cuisine)
