@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(NetworkView))]
 public class FireBasicAttack : MonoBehaviour 
 {
 	[SerializeField]
@@ -12,16 +13,12 @@ public class FireBasicAttack : MonoBehaviour
 	bool timeout = true;
 	GameObject clone;
 	
-	void Start() 
+	void FixedUpdate() 
 	{
-	}
-	
-	void Update() 
-	{
-		if(Input.GetKey(_shortcut))
-		{
-			Invoke("ProjectileCreation", 0.01f);
-		}
+			if(Input.GetKey(_shortcut))
+			{
+				Invoke("ProjectileCreation", 0.01f);
+			}
 	}
 	
 	void ProjectileCreation()
@@ -31,11 +28,11 @@ public class FireBasicAttack : MonoBehaviour
 			timeout = false;
 			
 			Vector3 new_position = _transform.position;
-			new_position.y += 0.15f;
+			new_position.z += 1.0f;
 			clone = (GameObject)Instantiate(_projectile, new_position, _transform.rotation);
 			
-			clone.rigidbody.AddRelativeForce(Vector3.forward * Time.deltaTime * 40000);
-			Invoke("ProjectileDestruction", 2);
+			clone.rigidbody.AddRelativeForce(Vector3.forward * Time.deltaTime * 70000);
+			Invoke("ProjectileDestruction", _reloadTime * 0.8f);
 			Invoke("Reload", _reloadTime);
 		}
 	}
