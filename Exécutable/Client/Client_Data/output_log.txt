@@ -11,20 +11,143 @@ Platform assembly: C:\Users\jamal\Desktop\Client_Data\Managed\UnityEngine.dll (t
 Loading C:\Users\jamal\Desktop\Client_Data\Managed\UnityEngine.dll into Unity Child Domain
 Platform assembly: C:\Users\jamal\Desktop\Client_Data\Managed\Assembly-CSharp.dll (this message is harmless)
 Loading C:\Users\jamal\Desktop\Client_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
-- Completed reload, in  0.041 seconds
+- Completed reload, in  0.040 seconds
 desktop: 1366x768 60Hz; virtual: 1366x768 at 0,0
 <RI> Initializing input.
-XInput1_3.dll not found.
 <RI> Input initialized.
-UnloadTime: 0.304470 ms
+UnloadTime: 0.286936 ms
 Unloading 4 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
 
-Unloading 2 unused Assets to reduce memory usage. Loaded Objects now: 150.
-Total: 0.566605 ms (FindLiveObjects: 0.015394 ms CreateObjectMapping: 0.011545 ms MarkObjects: 0.112893 ms  DeleteObjects: 0.004276 ms)
+Unloading 2 unused Assets to reduce memory usage. Loaded Objects now: 157.
+Total: 0.551208 ms (FindLiveObjects: 0.014539 ms CreateObjectMapping: 0.009835 ms MarkObjects: 0.115886 ms  DeleteObjects: 0.003848 ms)
 
-UnloadTime: 0.231773 ms
+UnloadTime: 0.229634 ms
 Unloading 2 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
 
-Unloading 1 unused Assets to reduce memory usage. Loaded Objects now: 176.
-Total: 0.613217 ms (FindLiveObjects: 0.006842 ms CreateObjectMapping: 0.006414 ms MarkObjects: 0.162498 ms  DeleteObjects: 0.003848 ms)
+Unloading 1 unused Assets to reduce memory usage. Loaded Objects now: 3739.
+Total: 0.885184 ms (FindLiveObjects: 0.115458 ms CreateObjectMapping: 0.025229 ms MarkObjects: 0.315587 ms  DeleteObjects: 0.010690 ms)
+
+View ID AllocatedID: 0 not found during lookup. Strange behaviour may occur
+ 
+(Filename:  Line: 1677)
+
+Couldn't perform remote Network.Destroy because the network view 'AllocatedID: 0' could not be located.
+ 
+(Filename:  Line: 2459)
+
+View ID AllocatedID: 0 not found during lookup. Strange behaviour may occur
+ 
+(Filename:  Line: 1677)
+
+Couldn't perform remote Network.Destroy because the network view 'AllocatedID: 0' could not be located.
+ 
+(Filename:  Line: 2459)
+
+View ID AllocatedID: 0 not found during lookup. Strange behaviour may occur
+ 
+(Filename:  Line: 1677)
+
+Couldn't perform remote Network.Destroy because the network view 'AllocatedID: 0' could not be located.
+ 
+(Filename:  Line: 2459)
+
+View ID AllocatedID: 0 not found during lookup. Strange behaviour may occur
+ 
+(Filename:  Line: 1677)
+
+Couldn't perform remote Network.Destroy because the network view 'AllocatedID: 0' could not be located.
+ 
+(Filename:  Line: 2459)
+
+View ID AllocatedID: 0 not found during lookup. Strange behaviour may occur
+ 
+(Filename:  Line: 1677)
+
+Couldn't perform remote Network.Destroy because the network view 'AllocatedID: 0' could not be located.
+ 
+(Filename:  Line: 2459)
+
+View ID AllocatedID: 0 not found during lookup. Strange behaviour may occur
+ 
+(Filename:  Line: 1677)
+
+Couldn't perform remote Network.Destroy because the network view 'AllocatedID: 0' could not be located.
+ 
+(Filename:  Line: 2459)
+
+View ID AllocatedID: 0 not found during lookup. Strange behaviour may occur
+ 
+(Filename:  Line: 1677)
+
+Couldn't perform remote Network.Destroy because the network view 'AllocatedID: 0' could not be located.
+ 
+(Filename:  Line: 2459)
+
+View ID AllocatedID: 0 not found during lookup. Strange behaviour may occur
+ 
+(Filename:  Line: 1677)
+
+Couldn't perform remote Network.Destroy because the network view 'AllocatedID: 0' could not be located.
+ 
+(Filename:  Line: 2459)
+
+View ID AllocatedID: 0 not found during lookup. Strange behaviour may occur
+ 
+(Filename:  Line: 1677)
+
+Couldn't perform remote Network.Destroy because the network view 'AllocatedID: 0' could not be located.
+ 
+(Filename:  Line: 2459)
+
+View ID AllocatedID: 0 not found during lookup. Strange behaviour may occur
+ 
+(Filename:  Line: 1677)
+
+Couldn't perform remote Network.Destroy because the network view 'AllocatedID: 0' could not be located.
+ 
+(Filename:  Line: 2459)
+
+View ID AllocatedID: 0 not found during lookup. Strange behaviour may occur
+ 
+(Filename:  Line: 1677)
+
+Couldn't perform remote Network.Destroy because the network view 'AllocatedID: 0' could not be located.
+ 
+(Filename:  Line: 2459)
+
+View ID AllocatedID: 0 not found during lookup. Strange behaviour may occur
+ 
+(Filename:  Line: 1677)
+
+Couldn't perform remote Network.Destroy because the network view 'AllocatedID: 0' could not be located.
+ 
+(Filename:  Line: 2459)
+
+View ID AllocatedID: 0 not found during lookup. Strange behaviour may occur
+ 
+(Filename:  Line: 1677)
+
+Couldn't perform remote Network.Destroy because the network view 'AllocatedID: 0' could not be located.
+ 
+(Filename:  Line: 2459)
+
+Failed to send remove RPCs command to network
+ 
+(Filename:  Line: 2459)
+
+No objects for the given player ID were deleted 1
+ 
+(Filename:  Line: 1369)
+
+UnloadTime: 9.288021 ms
+Unloading 1 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
+
+Unloading 40 unused Assets to reduce memory usage. Loaded Objects now: 179.
+Total: 0.711140 ms (FindLiveObjects: 0.007269 ms CreateObjectMapping: 0.013256 ms MarkObjects: 0.161642 ms  DeleteObjects: 0.147530 ms)
+
+UnloadTime: 0.194569 ms
+Unloading 1 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
+
+Unloading 1 unused Assets to reduce memory usage. Loaded Objects now: 164.
+Total: 0.555912 ms (FindLiveObjects: 0.006842 ms CreateObjectMapping: 0.010263 ms MarkObjects: 0.150951 ms  DeleteObjects: 0.002565 ms)
 

@@ -30,6 +30,22 @@ public class CreateChatBox : MonoBehaviour
 	}
 	
 	[SerializeField]
+	private float _offsetX = 0.01f;
+	public float OffsetX
+	{
+		get { return _offsetX; }
+		set { _offsetX = value; }
+	}	
+	
+	[SerializeField]
+	private float _offsetY = 0.05f;
+	public float OffsetY
+	{
+		get { return _offsetY; }
+		set { _offsetY = value; }
+	}	
+	
+	[SerializeField]
 	private float _sizeW = 0.33f;
 	public float SizeW
 	{
@@ -45,10 +61,10 @@ public class CreateChatBox : MonoBehaviour
 		set { _sizeH = value; }
 	}	
 	
-	string _messageBox = string.Empty;
-	Rect _chatBox = new Rect(Screen.width * 0.01f, Screen.height * 0.05f, Screen.width * 0.33f, Screen.height * 0.90f);
-	
-	List<string> filtre_insultes = new List<string>();
+	private string _messageBox = string.Empty;
+	private Rect _chatBox = new Rect();
+	private Vector2 scrollPosition = Vector2.zero;
+	private List<string> filtre_insultes = new List<string>();
 	
 	void Awake()
 	{
@@ -59,6 +75,9 @@ public class CreateChatBox : MonoBehaviour
 		filtre_insultes.Add("abruti");
 		filtre_insultes.Add("misérable");
 		filtre_insultes.Add("con");
+		
+		_chatBox.x = Screen.width * OffsetX; 
+		_chatBox.y = Screen.height * OffsetY;
 		_chatBox.width = Screen.width * SizeW;
 		_chatBox.height = Screen.height * SizeH;
 	}
@@ -74,17 +93,20 @@ public class CreateChatBox : MonoBehaviour
 	void chatBoxHandler(int id)
 	{
 		GUI.skin = Skin;
-		GUILayout.Box(_messageBox, GUILayout.Height(_chatBox.height * 0.50f));
+		
+    	scrollPosition = GUILayout.BeginScrollView (scrollPosition, GUILayout.Width(_chatBox.width * 0.95f), GUILayout.Height(_chatBox.height * 0.33f));
+			GUILayout.Box(_messageBox);
+		GUILayout.EndScrollView();
 		
 		GUILayout.BeginHorizontal();
 			GUILayout.Label("User");
-			User = GUILayout.TextField(User);
+			User = GUILayout.TextField(User, 15);
 		GUILayout.EndHorizontal();
 		
 		GUILayout.BeginHorizontal();
 			GUILayout.Label("Message");
 			GUI.SetNextControlName("MessageTextField");
-			Message = GUILayout.TextField(Message);
+			Message = GUILayout.TextArea(Message, 150, GUILayout.Width(_chatBox.width * 0.4f));
 			GUI.SetNextControlName(string.Empty);
 		GUILayout.EndHorizontal();
 		
@@ -105,7 +127,7 @@ public class CreateChatBox : MonoBehaviour
 		
 		if(Event.current.type == EventType.Repaint)
 		{
-			_chatBox = new Rect(Screen.width * 0.01f, Screen.height * 0.05f, Screen.width * 0.33f, Screen.height * 0.90f);
+			_chatBox = new Rect(Screen.width * OffsetX, Screen.height * OffsetY, Screen.width * SizeW, Screen.height * SizeH);
 		}
 	}
 	
@@ -143,7 +165,7 @@ public class CreateChatBox : MonoBehaviour
 		if(mess != "")
 		{	
 			mess = InsulteFilter(mess);
-			_messageBox += user + " say : " + mess + "\n";
+			_messageBox += "<b>" + user + "</b> say : " + mess + "\n";
 		}
 	}
 }

@@ -5,64 +5,86 @@ using System.Collections;
 public class ThirdPersonController : MonoBehaviour 
 {
 	[SerializeField]
-	public Transform _transform;
-	public float _speed = 1.0f;
-	public float _angularSpeed = 1.0f;
-	public float _jumpHeight = 15.0f;
+	private Rigidbody _body;
+	public Rigidbody Body
+	{
+		get { return _body; }
+		set { _body = value; }
+	}
 	
-	float _tmpYSaut = 0.0f;
-	bool _jumping = false;
+	[SerializeField]
+	private float _speed = 2.0f;
+	public float Speed
+	{
+		get { return _speed; }
+		set { _speed = value; }
+	}
+	
+	[SerializeField]
+	private float _angularSpeed = 80.0f;
+	public float AngularSpeed
+	{
+		get { return _angularSpeed; }
+		set { _angularSpeed = value; }
+	}
+	
+	private bool jumpReloaded = true;
 	
 	void FixedUpdate() 
 	{
+		/*
+		if(Network.peerType == NetworkPeerType.Server)
+		{
+			if(!networkView.isMine)
+			{
+				networkView.RPC("ServerPositionAndRotationSync", RPCMode.Others, Body.position, Body.rotation);	
+			}
+		}
+		*/
+		
 		if(networkView.isMine)
 		{
 			if(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.Q))
 			{
-				_transform.RotateAround(Vector3.up, -_angularSpeed * Time.deltaTime);
+				Body.transform.Rotate(0.0f, -AngularSpeed * Time.deltaTime, 0.0f);
 			}
 			
 			if(Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
 			{
-				_transform.RotateAround(Vector3.up, _angularSpeed * Time.deltaTime);	
+				Body.transform.Rotate(0.0f, AngularSpeed * Time.deltaTime, 0.0f);
 			}
 			
 			if(Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.Z))
 			{
-				_transform.Translate(Vector3.forward * Time.deltaTime * _speed);	
+				Body.transform.Translate(Vector3.forward * Time.deltaTime * Speed);	
 			}
 			
 			if(Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
 			{
-				_transform.Translate(Vector3.back * Time.deltaTime * _speed);	
+				Body.transform.Translate(Vector3.back * Time.deltaTime * Speed);	
 			}
 	
 			if(Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.Keypad0))
 			{
-				if(!_jumping)
+				if(jumpReloaded)
 				{
-					_tmpYSaut = _transform.position.y;
-					Jump();
-				}
-				else
-				{
-					if(_transform.position.y >= _jumpHeight + _tmpYSaut)
-					{
-						GoDown();
-						_jumping = false;
-					}
+					jumpReloaded = false;
+					Body.AddForce(Vector3.up * Time.deltaTime * 10000.0f, ForceMode.Acceleration);
+					Invoke("ReloadJump", 1.0f);
 				}
 			}
 		}
 	}
 	
-	void Jump()
+	void ReloadJump()
 	{
-		_transform.Translate(Vector3.up * Time.deltaTime * _speed);
+		jumpReloaded = true;
 	}
 	
-	void GoDown()
+	[RPC]
+	void ServerPositionAndRotationSync(Vector3 position, Quaternion rotation)
 	{
-		_transform.Translate(Vector3.down * Time.deltaTime * _speed);
+		Body.transform.position = position;
+		Body.transform.rotation = rotation;
 	}
 }

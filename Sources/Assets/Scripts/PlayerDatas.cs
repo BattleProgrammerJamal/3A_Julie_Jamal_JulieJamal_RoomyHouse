@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(NetworkView))]
 public class PlayerDatas : MonoBehaviour 
 {	
 	[SerializeField]
@@ -61,21 +62,24 @@ public class PlayerDatas : MonoBehaviour
 	
 	float _healthBarLength;
 	
-	void Start() 
+	void OnNetworkLoadedLevel() 
 	{
-		_healthBarLength = Screen.width / 2;
-	}
-	
-	void Update() 
-	{
-		AdjustHealth(0);
+		if(networkView.isMine)
+		{
+			_healthBarLength = Screen.width / 2;
+		}
 	}
 	
 	void OnGUI() 
 	{
-		GUI.Box(new Rect(10, 10, Screen.width * 0.10f, 25), PlayerName); 
-		GUI.Box(new Rect(10 + Screen.width * 0.10f + 3.0f, 10, Screen.width * 0.80f, 25), RedBalls + " red balls | " + YellowBalls + " yellow balls | " + GreenBalls + " green balls  [ " + Power + " orbes du chaos ]"); 
-		GUI.Box(new Rect(10, 38, 60.0f + _healthBarLength, 20), (Health * 100.0f) / MaxHealth + "%");
+		if(networkView.isMine)
+		{
+			AdjustHealth(0);
+			
+			GUI.Box(new Rect(10, 10, Screen.width * 0.10f, 25), PlayerName); 
+			GUI.Box(new Rect(10 + Screen.width * 0.10f + 3.0f, 10, Screen.width * 0.80f, 25), RedBalls + " red balls | " + YellowBalls + " yellow balls | " + GreenBalls + " green balls  [ " + Power + " chaos orbs ]"); 
+			GUI.Box(new Rect(10, 38, 60.0f + _healthBarLength, 20), (Health * 100.0f) / MaxHealth + "%");
+		}
 	}
 	
 	public void AdjustHealth(float health)
