@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+  <asset>
+    <contributor>
+      <author>Blender User</author>
+      <authoring_tool>Blender 2.68.0 r58537</authoring_tool>
+    </contributor>
+    <created>2014-04-24T13:52:13</created>
+    <modified>2014-04-24T13:52:13</modified>
+    <unit name="meter" meter="1"/>
+    <up_axis>Z_UP</up_axis>
+  </asset>
+  <library_images/>
+  <library_effects>
+    <effect id="cle-effect">
+      <profile_COMMON>
+        <technique sid="common">
+          <phong>
+            <emission>
+              <color sid="emission">0 0 0 1</color>
+            </emission>
+            <ambient>
+              <color sid="ambient">0 0 0 1</color>
+            </ambient>
+            <diffuse>
+              <color sid="diffuse">0.8 0.6596195 0 1</color>
+            </diffuse>
+            <specular>
+              <color sid="specular">0.5 0.411393 0 1</color>
+            </specular>
+            <shininess>
+              <float sid="shininess">50</float>
+            </shininess>
+            <index_of_refraction>
+              <float sid="index_of_refraction">1</float>
+            </index_of_refraction>
+          </phong>
+        </technique>
+        <extra>
+          <technique profile="GOOGLEEARTH">
+            <double_sided>1</double_sided>
+          </technique>
+        </extra>
+      </profile_COMMON>
+      <extra><technique profile="MAX3D"><double_sided>1</double_sided></technique></extra>
+    </effect>
+  </library_effects>
+  <library_materials>
+    <material id="cle-material" name="cle">
+      <instance_effect url="#cle-effect"/>
+    </material>
+  </library_materials>
+  <library_geometries>
+    <geometry id="Sphere_001-mesh" name="Sphere.001">
+      <mesh>
+        <source id="Sphere_001-mesh-positions">
+          <float_array id="Sphere_001-mesh-positions-array" count="30">-4.45841e-4 0.002195358 0.3253727 -4.45829e-4 0.002195358 -0.3252667 -0.2453768 0.7541227 0.2005471 -0.2453768 0.7541227 -0.2005473 0.6417763 0.4641657 0.1996055 0.6417763 0.4641657 -0.1996056 0.2525485 1.5965 0.1399419 0.2525485 1.5965 -0.1399422 0.734083 1.44004 0.1399419 0.734083 1.44004 -0.1399422</float_array>
+          <technique_common>
+            <accessor source="#Sphere_001-mesh-positions-array" count="10" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Sphere_001-mesh-normals">
+          <float_array id="Sphere_001-mesh-normals-array" count="30">0.5714591 0.04007077 0.8196356 0.5714591 0.04000973 -0.8196356 0.6823023 0.460036 0.5681326 -0.2811976 0.773278 -0.5682547 -0.2811976 0.773278 0.5682547 0.6823023 0.460036 -0.5681326 -0.4368114 0.3675954 0.8209784 -0.4368419 0.3675344 -0.8210089 0.06070131 0.1825312 -0.9812921 0.06073182 0.1826838 0.9812616</float_array>
+          <technique_common>
+            <accessor source="#Sphere_001-mesh-normals-array" count="10" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="Sphere_001-mesh-vertices">
+          <input semantic="POSITION" source="#Sphere_001-mesh-positions"/>
+        </vertices>
+        <polylist material="cle-material" count="12">
+          <input semantic="VERTEX" source="#Sphere_001-mesh-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#Sphere_001-mesh-normals" offset="1"/>
+          <vcount>3 3 3 3 3 3 3 3 3 3 3 3 </vcount>
+          <p>4 0 5 1 8 2 7 3 6 4 9 5 2 6 4 0 6 4 5 1 3 7 7 3 3 7 2 6 7 3 5 1 1 8 3 7 4 0 2 6 0 9 5 1 9 5 8 2 6 4 8 2 9 5 4 0 8 2 6 4 9 5 5 1 7 3 2 6 6 4 7 3</p>
+        </polylist>
+      </mesh>
+      <extra><technique profile="MAYA"><double_sided>1</double_sided></technique></extra>
+    </geometry>
+  </library_geometries>
+  <library_controllers/>
+  <library_visual_scenes>
+    <visual_scene id="Scene" name="Scene">
+      <node id="Sphere_001" name="Sphere_001" type="NODE">
+        <matrix sid="transform">2.593031 -0.8518825 5.44998e-7 0 0 -1.74614e-6 -2.729379 0 0.8518825 2.593031 -1.65891e-6 0 0 0 0 1</matrix>
+        <instance_geometry url="#Sphere_001-mesh">
+          <bind_material>
+            <technique_common>
+              <instance_material symbol="cle-material" target="#cle-material"/>
+            </technique_common>
+          </bind_material>
+        </instance_geometry>
+      </node>
+    </visual_scene>
+  </library_visual_scenes>
+  <scene>
+    <instance_visual_scene url="#Scene"/>
+  </scene>
+</COLLADA>

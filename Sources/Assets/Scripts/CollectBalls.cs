@@ -6,7 +6,7 @@ public class CollectBalls : MonoBehaviour
 {
 	[SerializeField]
 	private PlayerDatas _datas;
-	public PlayerDatas Datas
+	public PlayerDatas Datas 
 	{
 		get { return _datas; }
 		set { _datas = value; }
@@ -20,12 +20,15 @@ public class CollectBalls : MonoBehaviour
 		{
 			isSphere = true;
 			Datas.GreenBalls++;
+			Datas.AdjustHealth(5.0f);
 		}
 		
 		if(col.collider.name == "YellowSphere")
 		{
 			isSphere = true;
 			Datas.YellowBalls++;
+			GetComponentInChildren<Light>().intensity += 1.0f;
+			GetComponentInChildren<Light>().spotAngle += 3.0f;
 		}
 		
 		if(col.collider.name == "RedSphere")

@@ -61,6 +61,22 @@ public class UiTechnicsScript : MonoBehaviour
 		set { _key = value; }
 	}
 	
+	[SerializeField]
+	private AudioSource _source;
+	public AudioSource Source
+	{
+		get { return _source; }
+		set { _source = value; }
+	}
+	
+	[SerializeField]
+	private AudioClip _shootSound;
+	public AudioClip ShootSound
+	{
+		get { return _shootSound; }
+		set { _shootSound = value; }
+	}
+	
 	private bool timeout = true;
 	private GameObject clone;
 	private bool _showMenu = false;
@@ -114,6 +130,8 @@ public class UiTechnicsScript : MonoBehaviour
 	{
 		if(timeout)
 		{
+			Source.PlayOneShot(ShootSound);
+			
 			timeout = false;
 			clone = (GameObject)Network.Instantiate(Projectile, MyTransform.position, MyTransform.rotation, 0);
 			Physics.IgnoreCollision(clone.collider, MyTransform.collider);

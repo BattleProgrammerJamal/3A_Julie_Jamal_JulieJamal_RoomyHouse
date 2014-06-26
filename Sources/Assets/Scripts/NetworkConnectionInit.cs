@@ -60,19 +60,37 @@ public class NetworkConnectionInit : MonoBehaviour
 		set { _playerPrefab = value; }
 	}
 	
-	Rect _window = new Rect(Screen.width*0.35f, Screen.height*0.05f, Screen.width*0.60f, Screen.height*0.90f);
-	string[] levels = new string[]{ "Cuisine", "SalleDeBain" };
-	string disconnectedLevel = "Lobby";
+	[SerializeField]
+	private Texture _background;
+	public Texture Background
+	{
+		get { return _background; }
+		set { _background = value; }
+	}
+	
+	private Rect _window = new Rect(Screen.width*0.35f, Screen.height*0.05f, Screen.width*0.60f, Screen.height*0.90f);
+	private string[] levels = new string[]{ "Cuisine", "SalleDeBain" };
+	private string disconnectedLevel = "Lobby";
 	
 	private bool playing = false;
 	private int lastprefix = 0, numberOfPlayers = 0;
 	private GameObject spawnPoint1, spawnPoint2;
+
+	public static GameObject myPlayer;
 	
 	void Awake()
 	{
 		DontDestroyOnLoad(this);
 		networkView.group = 1;
 		Application.runInBackground = true;
+		if(PlayerPrefs.GetString("isClient") == "True")
+		{
+			IsServer = false;	
+		}
+		else
+		{
+			IsServer = true;
+		}
 	}
 	
 	void OnGUI() 
@@ -95,6 +113,7 @@ public class NetworkConnectionInit : MonoBehaviour
 		
 		if(!playing)
 		{	
+			GUI.DrawTexture(new Rect(0.0f, 0.0f, Screen.width, Screen.height), Background);
 			if(IsServer)
 			{
 				_window = GUI.Window(0, _window, OnServerNetworkWindowCreate, "SERVER CONNECTION");	
@@ -107,6 +126,11 @@ public class NetworkConnectionInit : MonoBehaviour
 			if(Event.current.type == EventType.Repaint)
 			{
 				_window = new Rect(Screen.width*0.35f, Screen.height*0.05f, Screen.width*0.60f, Screen.height*0.90f);
+			}
+			
+			if(!IsServer)
+			{
+				GUI.Label(new Rect(Screen.width * 0.33f, 1.0f, 100.0f, 20.0f), numberOfPlayers.ToString() + " / 2 players");
 			}
 		}
 	}
@@ -169,7 +193,7 @@ public class NetworkConnectionInit : MonoBehaviour
 	
 	void OnServerInitialized()
 	{
-		((CreateChatBox)GetComponent<CreateChatBox>()).networkView.RPC("SendChatMessage", RPCMode.All, "Server", "Server Initialized");
+		((CreateChatBox)GetComponent<CreateChatBox>()).networkView.RPC("SendChatMessage", RPCMode.AllBuffered, "Server", "Server Initialized");
 		((CreateChatBox)GetComponent<CreateChatBox>()).User = "Server";	
 	}
 	
@@ -193,8 +217,7 @@ public class NetworkConnectionInit : MonoBehaviour
 	void OnConnectedToServer()
 	{
 		playing = true;
-		PlayerPrefs.SetString("player_name", Name);
-		((CreateChatBox)GetComponent<CreateChatBox>()).networkView.RPC("SendChatMessage", RPCMode.All, Name, Name + " has joined the game ! ");
+		((CreateChatBox)GetComponent<CreateChatBox>()).networkView.RPC("SendChatMessage", RPCMode.AllBuffered, Name, Name + " has joined the game ! ");
 		((CreateChatBox)GetComponent<CreateChatBox>()).User = Name;
 	}
 	
@@ -244,6 +267,8 @@ public class NetworkConnectionInit : MonoBehaviour
 		((CreateChatBox)GetComponent<CreateChatBox>()).OffsetX = 0.01f;
 		((CreateChatBox)GetComponent<CreateChatBox>()).OffsetY = 0.45f;
 		
+		PlayerPrefs.SetString("player_name", Name);
+		
 		if(numberOfPlayers == 0)
 		{
 			SpawnPlayer(spawnPoint1.transform.position);
@@ -256,6 +281,12 @@ public class NetworkConnectionInit : MonoBehaviour
 			}
 		}
 		
+		AudioSource[] audioSources = (AudioSource[])FindObjectsOfType(typeof(AudioSource));
+		for(int i = 0; i < audioSources.Length; ++i)
+		{
+			audioSources[i].Stop();
+		}
+		
 		GameObject[] objects = (GameObject[])(FindObjectsOfType(typeof(GameObject)));
 		for(int i = 0; i < objects.Length; ++i)
 		{
@@ -265,6 +296,7 @@ public class NetworkConnectionInit : MonoBehaviour
 	
 	void SpawnPlayer(Vector3 location)
 	{
-		Network.Instantiate(PlayerPrefab, location, Quaternion.identity, 0);
+		Object player = Network.Instantiate(PlayerPrefab, location, Quaternion.identity, 0);
+		myPlayer = (GameObject)player;
 	}
 }

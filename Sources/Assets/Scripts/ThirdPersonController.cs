@@ -32,16 +32,6 @@ public class ThirdPersonController : MonoBehaviour
 	
 	void FixedUpdate() 
 	{
-		/*
-		if(Network.peerType == NetworkPeerType.Server)
-		{
-			if(!networkView.isMine)
-			{
-				networkView.RPC("ServerPositionAndRotationSync", RPCMode.Others, Body.position, Body.rotation);	
-			}
-		}
-		*/
-		
 		if(networkView.isMine)
 		{
 			if(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.Q))
@@ -79,12 +69,5 @@ public class ThirdPersonController : MonoBehaviour
 	void ReloadJump()
 	{
 		jumpReloaded = true;
-	}
-	
-	[RPC]
-	void ServerPositionAndRotationSync(Vector3 position, Quaternion rotation)
-	{
-		Body.transform.position = position;
-		Body.transform.rotation = rotation;
 	}
 }

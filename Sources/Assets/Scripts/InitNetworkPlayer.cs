@@ -1,35 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(NetworkView))]
 public class InitNetworkPlayer : MonoBehaviour
 {
-	PlayerDatas playerDatas;
-	
-	void Start()
-	{
-		playerDatas = GetComponent<PlayerDatas>();	
-	}
-	
 	void OnNetworkLoadedLevel()
 	{
-		//((PlayerDatas)playerDatas).PlayerName = PlayerPrefs.GetString("player_name");
 		if(networkView.isMine)
 		{
+			GetComponent<PlayerDatas>().PlayerName = PlayerPrefs.GetString("player_name");
 			Camera myCamera = GetComponentInChildren<Camera>();
 			if(myCamera != null)
 			{
 				myCamera.enabled = true;	
-			}
-		}
-	}
-	
-	void Update()
-	{
-		if(networkView.isMine)
-		{
-			if(transform.position.y < 0.0f)
-			{
-				((PlayerDatas)playerDatas).AdjustHealth(0.0f);
+				myCamera.GetComponent<AudioListener>().enabled = true;
 			}
 		}
 	}

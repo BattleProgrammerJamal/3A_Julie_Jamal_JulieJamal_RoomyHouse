@@ -68,13 +68,32 @@ public class CreateChatBox : MonoBehaviour
 	
 	void Awake()
 	{
-		filtre_insultes.Add("idiot");	
+		filtre_insultes.Add("idiot");
+		filtre_insultes.Add("con");
+		filtre_insultes.Add("connard");
+		filtre_insultes.Add("connasse");
 		filtre_insultes.Add("enfoiré");
 		filtre_insultes.Add("batard");
 		filtre_insultes.Add("bouffon");
 		filtre_insultes.Add("abruti");
 		filtre_insultes.Add("misérable");
+		filtre_insultes.Add("putain");
+		filtre_insultes.Add("merde");
+		filtre_insultes.Add("sale chien");
+		filtre_insultes.Add("enculé");
+		filtre_insultes.Add("couillon");
+		filtre_insultes.Add("bite");
+		filtre_insultes.Add("salop");
+		filtre_insultes.Add("chier");
+		filtre_insultes.Add("chieur");
+		filtre_insultes.Add("chieuse");
+		filtre_insultes.Add("chien");
+		filtre_insultes.Add("pute");
 		filtre_insultes.Add("con");
+		filtre_insultes.Add("pd");
+		filtre_insultes.Add("merdier");
+		filtre_insultes.Add("bordel");
+		filtre_insultes.Add("ta race");
 		
 		_chatBox.x = Screen.width * OffsetX; 
 		_chatBox.y = Screen.height * OffsetY;
@@ -112,7 +131,7 @@ public class CreateChatBox : MonoBehaviour
 		
 		if(GUILayout.Button("Send", GUILayout.Width(75)))
 		{
-			networkView.RPC("SendChatMessage", RPCMode.All, User, Message);
+			networkView.RPC("SendChatMessage", RPCMode.AllBuffered, User, Message);
 			Message = "";
 		}
 		
@@ -120,7 +139,7 @@ public class CreateChatBox : MonoBehaviour
 		{
 			if ((Event.current.type == EventType.KeyUp) && (Event.current.keyCode == KeyCode.Return))
 			{
-				networkView.RPC("SendChatMessage", RPCMode.All, User, Message);
+				networkView.RPC("SendChatMessage", RPCMode.AllBuffered, User, Message);
 				Message = "";
 			}
 		}
@@ -165,7 +184,7 @@ public class CreateChatBox : MonoBehaviour
 		if(mess != "")
 		{	
 			mess = InsulteFilter(mess);
-			_messageBox += "<b>" + user + "</b> say : " + mess + "\n";
+			_messageBox += "<b>" + user + "</b> says : " + mess + "\n";
 		}
 	}
 }

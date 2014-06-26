@@ -29,14 +29,6 @@ public class PlayerDatas : MonoBehaviour
 	}
 	
 	[SerializeField]
-	private float _power = 5.0f;
-	public float Power
-	{
-		get { return _power; }
-		set { _power = value; }
-	}
-	
-	[SerializeField]
 	private int _redBalls = 0;
 	public int RedBalls
 	{
@@ -59,14 +51,30 @@ public class PlayerDatas : MonoBehaviour
 		get { return _greenBalls; }
 		set { _greenBalls = value; }
 	}
+
+	[SerializeField]
+	private int _nbCollectedFragments = 0;
+	public int NbCollectedFragments
+	{
+		get { return _nbCollectedFragments; }
+		set { _nbCollectedFragments = value; }
+	}
 	
 	float _healthBarLength;
-	
-	void OnNetworkLoadedLevel() 
+
+	void Start() 
 	{
 		if(networkView.isMine)
 		{
 			_healthBarLength = Screen.width / 2;
+		}
+	}
+	
+	void OnCollisionEnter(Collision col)
+	{
+		if(col.collider.name == "Projectile")
+		{
+			AdjustHealth(-(5.0f * Random.Range(1.0f, 3.0f)));
 		}
 	}
 	
@@ -76,8 +84,8 @@ public class PlayerDatas : MonoBehaviour
 		{
 			AdjustHealth(0);
 			
-			GUI.Box(new Rect(10, 10, Screen.width * 0.10f, 25), PlayerName); 
-			GUI.Box(new Rect(10 + Screen.width * 0.10f + 3.0f, 10, Screen.width * 0.80f, 25), RedBalls + " red balls | " + YellowBalls + " yellow balls | " + GreenBalls + " green balls  [ " + Power + " chaos orbs ]"); 
+			GUI.Box(new Rect(Screen.width * 0.01f, 10, Screen.width * 0.33f, 25), PlayerName); 
+			GUI.Box(new Rect(Screen.width * 0.36f, 10, Screen.width * 0.62f, 25), RedBalls + " red balls | " + YellowBalls + " yellow balls | " + GreenBalls + " green balls"); 
 			GUI.Box(new Rect(10, 38, 60.0f + _healthBarLength, 20), (Health * 100.0f) / MaxHealth + "%");
 		}
 	}
