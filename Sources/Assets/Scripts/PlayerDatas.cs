@@ -60,12 +60,15 @@ public class PlayerDatas : MonoBehaviour
 		set { _nbCollectedFragments = value; }
 	}
 	
+	public static bool PlayingState;
+	
 	float _healthBarLength;
 
 	void Start() 
 	{
 		if(networkView.isMine)
 		{
+			PlayingState = true;
 			_healthBarLength = Screen.width / 2;
 		}
 	}
@@ -74,7 +77,7 @@ public class PlayerDatas : MonoBehaviour
 	{
 		if(col.collider.name == "Projectile")
 		{
-			AdjustHealth(-(5.0f * Random.Range(1.0f, 3.0f)));
+			AdjustHealth(2.0f * Random.Range(-5, 5));
 		}
 	}
 	
@@ -83,7 +86,19 @@ public class PlayerDatas : MonoBehaviour
 		if(networkView.isMine)
 		{
 			AdjustHealth(0);
-			
+
+			if(Health == 0)
+			{
+				if(name == "player1")
+				{
+					networkView.RPC("Victory", RPCMode.All, "Player 2"); 
+				}
+				else
+				{
+					networkView.RPC("Victory", RPCMode.All, "Player 1"); 
+				}
+			}
+
 			GUI.Box(new Rect(Screen.width * 0.01f, 10, Screen.width * 0.33f, 25), PlayerName); 
 			GUI.Box(new Rect(Screen.width * 0.36f, 10, Screen.width * 0.62f, 25), RedBalls + " red balls | " + YellowBalls + " yellow balls | " + GreenBalls + " green balls"); 
 			GUI.Box(new Rect(10, 38, 60.0f + _healthBarLength, 20), (Health * 100.0f) / MaxHealth + "%");
@@ -97,5 +112,21 @@ public class PlayerDatas : MonoBehaviour
 		if(Health > MaxHealth) { Health = MaxHealth; }
 		if(MaxHealth < 1) { MaxHealth = 1; }
 		_healthBarLength = (Screen.width / 2) * (Health / (float)MaxHealth);
+	}
+
+	[RPC]
+	public void Victory(string pID)
+	{
+		PlayingState = false;
+		GUI.Box(new Rect(Screen.width * 0.5f - 100.0f, Screen.height * 0.5f - 50.0f, 200.0f, 100.0f), pID + " : " + PlayerName + " HAS WON !!! ");
+		Invoke("End", 3.0f);
+	}
+
+	public void End()
+	{
+		PlayingState = true;
+		Network.RemoveRPCs(Network.player);
+		Network.DestroyPlayerObjects(Network.player);
+		Application.LoadLevel("Menu");
 	}
 }

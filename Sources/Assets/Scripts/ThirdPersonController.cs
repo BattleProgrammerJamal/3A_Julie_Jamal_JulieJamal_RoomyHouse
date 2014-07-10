@@ -34,33 +34,36 @@ public class ThirdPersonController : MonoBehaviour
 	{
 		if(networkView.isMine)
 		{
-			if(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.Q))
+			if(PlayerDatas.PlayingState)
 			{
-				Body.transform.Rotate(0.0f, -AngularSpeed * Time.deltaTime, 0.0f);
-			}
-			
-			if(Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
-			{
-				Body.transform.Rotate(0.0f, AngularSpeed * Time.deltaTime, 0.0f);
-			}
-			
-			if(Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.Z))
-			{
-				Body.transform.Translate(Vector3.forward * Time.deltaTime * Speed);	
-			}
-			
-			if(Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
-			{
-				Body.transform.Translate(Vector3.back * Time.deltaTime * Speed);	
-			}
-	
-			if(Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.Keypad0))
-			{
-				if(jumpReloaded)
+				if(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.Q))
 				{
-					jumpReloaded = false;
-					Body.AddForce(Vector3.up * Time.deltaTime * 10000.0f, ForceMode.Acceleration);
-					Invoke("ReloadJump", 1.0f);
+					Body.transform.Rotate(0.0f, -AngularSpeed * Time.deltaTime, 0.0f);
+				}
+				
+				if(Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
+				{
+					Body.transform.Rotate(0.0f, AngularSpeed * Time.deltaTime, 0.0f);
+				}
+				
+				if(Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.Z))
+				{
+					Body.transform.Translate(Vector3.forward * Time.deltaTime * Speed);	
+				}
+				
+				if(Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
+				{
+					Body.transform.Translate(Vector3.back * Time.deltaTime * Speed);	
+				}
+				
+				if(Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.Keypad0))
+				{
+					if(jumpReloaded)
+					{
+						jumpReloaded = false;
+						Body.AddForce(Vector3.up * Time.deltaTime * 10000.0f, ForceMode.Acceleration);
+						Invoke("ReloadJump", 1.0f);
+					}
 				}
 			}
 		}

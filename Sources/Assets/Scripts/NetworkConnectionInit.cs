@@ -271,13 +271,13 @@ public class NetworkConnectionInit : MonoBehaviour
 		
 		if(numberOfPlayers == 0)
 		{
-			SpawnPlayer(spawnPoint1.transform.position);
+			SpawnPlayer(1, spawnPoint1.transform.position);
 		}
 		else
 		{
 			if(numberOfPlayers == 1)
 			{
-				SpawnPlayer(spawnPoint2.transform.position);
+				SpawnPlayer(2, spawnPoint2.transform.position);
 			}
 		}
 		
@@ -294,9 +294,10 @@ public class NetworkConnectionInit : MonoBehaviour
 		}
 	}
 	
-	void SpawnPlayer(Vector3 location)
+	void SpawnPlayer(int id, Vector3 location)
 	{
 		Object player = Network.Instantiate(PlayerPrefab, location, Quaternion.identity, 0);
 		myPlayer = (GameObject)player;
+		myPlayer.name = "player" + id.ToString ();
 	}
 }

@@ -4,22 +4,14 @@ using System.Collections;
 [RequireComponent(typeof(NetworkView))]
 public class TeleportationPlateforme : MonoBehaviour 
 {
-	[SerializeField]
-	private GameObject _player;
-	public GameObject Player
+	void OnTriggerEnter(Collider col)
 	{
-		get { return _player; }
-		set { _player = value; }
-	}
-
-	void OnCollisionEnter(Collision col)
-	{
-		if(networkView.isMine && col.collider.name == "PlayerTmp") 
+		if(col.name == "PlayerTmp") 
 		{
 			GameObject teleporteur = GameObject.FindGameObjectWithTag("spawnSecondFloor");
-			Player.transform.position = teleporteur.transform.position;
-			Debug.Log("NETWORKVIEW.ISMINE AND TRIGGER ENTER");
+			transform.position = teleporteur.transform.position;
+			Vector3 u = new Vector3(transform.position.x + 1500, transform.position.y, transform.position.z);
+			transform.position = u;
 		}
-		Debug.Log("TRIGGER ENTER");
 	}
 }
