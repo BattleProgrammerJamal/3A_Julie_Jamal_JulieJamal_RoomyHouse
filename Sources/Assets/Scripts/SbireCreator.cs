@@ -29,7 +29,7 @@ public class SbireCreator : MonoBehaviour
 	}
 
 	[SerializeField]
-	private float _minimumPlayerDistance = 1.0f;
+	private float _minimumPlayerDistance = 3.0f;
 	public float MinimumPlayerDistance
 	{
 		get { return _minimumPlayerDistance; }
@@ -37,17 +37,32 @@ public class SbireCreator : MonoBehaviour
 	}
 
 	private GameObject minionSpawn;
+	private bool _isAtGoodDistance;
 
 	void Start()
 	{
+		_isAtGoodDistance = false;
 		minionSpawn = GameObject.FindGameObjectWithTag("minionSpawn");
+	}
+	
+	void FixedUpdate()
+	{
+			Vector3 vPlayer = NetworkConnectionInit.myPlayer.transform.position;
+			Vector3 vChaudron = this.transform.position;
+			
+			float dst = Vector3.Distance(vPlayer, vChaudron);
+			
+			if(dst <= MinimumPlayerDistance)
+			{
+				_isAtGoodDistance = true;
+			}
 	}
 	
 	void OnMouseDown()
 	{
 		if(networkView.isMine)
 		{
-			if(Vector3.Distance(this.transform.position, NetworkConnectionInit.myPlayer.transform.position) < MinimumPlayerDistance)
+			if(_isAtGoodDistance)
 			{
 				PlayerDatas datas = (PlayerDatas)NetworkConnectionInit.myPlayer.GetComponent(typeof(PlayerDatas));
 				if(datas.RedBalls >= 5)
