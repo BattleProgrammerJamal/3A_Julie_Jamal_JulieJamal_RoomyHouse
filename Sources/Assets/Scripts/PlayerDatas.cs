@@ -75,9 +75,18 @@ public class PlayerDatas : MonoBehaviour
 	
 	void OnCollisionEnter(Collision col)
 	{
-		if(col.collider.name == "Projectile")
+		if(networkView.isMine && col.collider.name == "Projectile")
 		{
-			AdjustHealth(2.0f * Random.Range(-5, 5));
+			int val = Random.Range(0, 100);
+			
+			if(val < 25)
+			{
+				AdjustHealth(-25.0f);
+			}
+			else
+			{
+				AdjustHealth(-12.0f);
+			}
 		}
 	}
 	
@@ -87,20 +96,20 @@ public class PlayerDatas : MonoBehaviour
 		{
 			AdjustHealth(0);
 
-			if(Health == 0)
+			if(Health <= 0)
 			{
 				if(name == "player1")
 				{
-					networkView.RPC("Victory", RPCMode.All, "Player 2"); 
+					networkView.RPC("Victory", RPCMode.AllBuffered, "Player 2"); 
 				}
 				else
 				{
-					networkView.RPC("Victory", RPCMode.All, "Player 1"); 
+					networkView.RPC("Victory", RPCMode.AllBuffered, "Player 1"); 
 				}
 			}
 
 			GUI.Box(new Rect(Screen.width * 0.01f, 10, Screen.width * 0.33f, 25), PlayerName); 
-			GUI.Box(new Rect(Screen.width * 0.36f, 10, Screen.width * 0.62f, 25), RedBalls + " red balls | " + YellowBalls + " yellow balls | " + GreenBalls + " green balls"); 
+			GUI.Box(new Rect(Screen.width * 0.36f, 10, Screen.width * 0.62f, 25), RedBalls + " red balls | " + YellowBalls + " yellow balls | " + GreenBalls + " green balls | " + NbCollectedFragments + " star fragments"); 
 			GUI.Box(new Rect(10, 38, 60.0f + _healthBarLength, 20), (Health * 100.0f) / MaxHealth + "%");
 		}
 	}
