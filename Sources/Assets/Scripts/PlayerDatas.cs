@@ -75,7 +75,7 @@ public class PlayerDatas : MonoBehaviour
 	
 	void OnCollisionEnter(Collision col)
 	{
-		if(networkView.isMine && col.collider.name == "Projectile")
+		if(col.collider.name == "Projectile")
 		{
 			int val = Random.Range(0, 100);
 			
@@ -105,6 +105,18 @@ public class PlayerDatas : MonoBehaviour
 				else
 				{
 					networkView.RPC("Victory", RPCMode.AllBuffered, "Player 1"); 
+				}
+			}
+
+			if(NbCollectedFragments >= 5)
+			{
+				if(name == "player1")
+				{
+					networkView.RPC("Victory", RPCMode.AllBuffered, "Player 1"); 
+				}
+				else
+				{
+					networkView.RPC("Victory", RPCMode.AllBuffered, "Player 2"); 
 				}
 			}
 
