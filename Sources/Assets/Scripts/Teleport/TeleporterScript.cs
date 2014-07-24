@@ -5,6 +5,14 @@ using System.Collections;
 public class TeleporterScript : MonoBehaviour 
 {   
 	[SerializeField]
+	private GameObject _playerPrefab;
+	public GameObject PlayerPrefab
+	{
+		get { return _playerPrefab; }
+		set { _playerPrefab = value; }
+	}
+
+	[SerializeField]
 	private Transform _destination;
 	public Transform Destination
 	{
@@ -12,11 +20,11 @@ public class TeleporterScript : MonoBehaviour
 		set { _destination = value; }
 	}
 
-    void OnCollisionEnter(Collision col) 
+    void OnTriggerEnter(Collider col) 
     {
-		if(col.collider.name == "PlayerTmp")
+		if(col.gameObject.name == "myPlayer")
 		{
-			NetworkConnectionInitScript.myPlayer.rigidbody.position = Destination.position;
+			PlayerPrefab.rigidbody.position = Destination.position;
 		}
 	}
 }

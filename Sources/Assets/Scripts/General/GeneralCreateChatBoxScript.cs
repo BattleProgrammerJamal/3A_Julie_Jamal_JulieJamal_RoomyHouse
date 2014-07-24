@@ -184,7 +184,7 @@ public class GeneralCreateChatBoxScript : MonoBehaviour
 		if(mess != "")
 		{	
 			mess = InsulteFilter(mess);
-			_messageBox += "<b>" + user + "</b> says : " + mess + "\n";
+			_messageBox += "<b>" + user + "</b> says : " + mess;
 		}
 	}
 }

@@ -93,7 +93,7 @@ public class PlayerUiTechnicsScript : MonoBehaviour
 			Invoke("ProjectileCreation", 0.01f);
 		}
 	
-		if(GUILayout.Button(MenuInGameTexture, GUILayout.Width(64), GUILayout.Height(64)))
+		if(GUILayout.Button(MenuInGameTexture, GUILayout.Width(64), GUILayout.Height(64)) || Input.GetKeyUp(Key))
 		{
 			if(!_activeTimeout)
 			{

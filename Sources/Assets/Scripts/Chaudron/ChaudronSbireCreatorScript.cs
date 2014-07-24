@@ -11,7 +11,15 @@ public class ChaudronSbireCreatorScript : MonoBehaviour
 		get { return _minionPrefab; }
 		set { _minionPrefab = value; }
 	}
-	
+
+	[SerializeField]
+	private GameObject _playerPrefab;
+	public GameObject PlayerPrefab
+	{
+		get { return _playerPrefab; }
+		set { _playerPrefab = value; }
+	}
+
 	[SerializeField]
 	private Texture2D _baseCursorTexture;
 	public Texture2D BaseCursorTexture
@@ -47,15 +55,15 @@ public class ChaudronSbireCreatorScript : MonoBehaviour
 	
 	void FixedUpdate()
 	{
-		Vector3 vPlayer = NetworkConnectionInitScript.myPlayer.transform.position;
-			Vector3 vChaudron = this.transform.position;
-			
-			float dst = Vector3.Distance(vPlayer, vChaudron);
-			
-			if(dst <= MinimumPlayerDistance)
-			{
-				_isAtGoodDistance = true;
-			}
+		Vector3 vPlayer = PlayerPrefab.transform.position;
+		Vector3 vChaudron = this.transform.position;
+
+		float dst = Vector3.Distance(vPlayer, vChaudron);
+
+		if(dst <= MinimumPlayerDistance)
+		{
+			_isAtGoodDistance = true;
+		}
 	}
 	
 	void OnMouseDown()

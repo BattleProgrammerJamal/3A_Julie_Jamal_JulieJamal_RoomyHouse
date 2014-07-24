@@ -90,6 +90,7 @@ public class NetworkConnectionInitScript : MonoBehaviour
 		else
 		{
 			IsServer = true;
+			AudioListener.volume = 0.0f;
 		}
 	}
 	
@@ -193,7 +194,7 @@ public class NetworkConnectionInitScript : MonoBehaviour
 	
 	void OnServerInitialized()
 	{
-		((GeneralCreateChatBoxScript)GetComponent<GeneralCreateChatBoxScript>()).networkView.RPC("SendChatMessage", RPCMode.AllBuffered, "Server", "Server Initialized");
+		((GeneralCreateChatBoxScript)GetComponent<GeneralCreateChatBoxScript>()).networkView.RPC("SendChatMessage", RPCMode.AllBuffered, "Server", "Server Initialized\n");
 		((GeneralCreateChatBoxScript)GetComponent<GeneralCreateChatBoxScript>()).User = "Server";	
 	}
 	
@@ -204,7 +205,8 @@ public class NetworkConnectionInitScript : MonoBehaviour
 			Network.RemoveRPCsInGroup(0);
 			Network.RemoveRPCsInGroup(1);
 			
-			int n = Random.Range(0, levels.Length - 1);
+			int n = Random.Range(0, levels.Length);
+			n = 0;
 			networkView.RPC("LoadClientLevel", RPCMode.Others, levels[n].ToString(), lastprefix + 1);
 		}
 	}
@@ -298,6 +300,7 @@ public class NetworkConnectionInitScript : MonoBehaviour
 	{
 		Object player = Network.Instantiate(PlayerPrefab, location, Quaternion.identity, 0);
 		myPlayer = (GameObject)player;
-		myPlayer.name = "player" + id.ToString ();
+		//	myPlayer.name = "player" + id.ToString ();
+		myPlayer.name = "myPlayer";
 	}
 }

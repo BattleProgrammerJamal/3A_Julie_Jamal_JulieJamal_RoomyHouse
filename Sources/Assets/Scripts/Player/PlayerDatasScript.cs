@@ -75,19 +75,7 @@ public class PlayerDatasScript : MonoBehaviour
 	
 	void OnCollisionEnter(Collision col)
 	{
-		if(col.collider.name == "Projectile")
-		{
-			int val = Random.Range(0, 100);
-			
-			if(val < 25)
-			{
-				AdjustHealth(-25.0f);
-			}
-			else
-			{
-				AdjustHealth(-12.0f);
-			}
-		}
+		networkView.RPC("HitTarget", RPCMode.All, col.gameObject.name);
 	}
 	
 	void OnGUI() 
@@ -139,8 +127,29 @@ public class PlayerDatasScript : MonoBehaviour
 	public void Victory(string pID)
 	{
 		PlayingState = false;
-		GUI.Box(new Rect(Screen.width * 0.5f - 100.0f, Screen.height * 0.5f - 50.0f, 200.0f, 100.0f), pID + " : " + PlayerName + " HAS WON !!! ");
+		GUIStyle style = new GUIStyle();
+		style.wordWrap = true;
+		GUI.Box(new Rect(Screen.width * 0.5f - 100.0f, Screen.height * 0.5f - 50.0f, 200.0f, 100.0f), pID + " : " + PlayerName + " HAS WON !!! ", style);
 		Invoke("End", 3.0f);
+	}
+
+	[RPC]
+	void HitTarget(string name)
+	{
+		Debug.Log (name);
+		if(name == "Projectile(Clone)")
+		{
+			int val = Random.Range(0, 100);
+			
+			if(val < 25)
+			{
+				AdjustHealth(-25.0f);
+			}
+			else
+			{
+				AdjustHealth(-12.0f);
+			}
+		}
 	}
 
 	public void End()
@@ -148,6 +157,7 @@ public class PlayerDatasScript : MonoBehaviour
 		PlayingState = true;
 		Network.RemoveRPCs(Network.player);
 		Network.DestroyPlayerObjects(Network.player);
+		Network.Disconnect();
 		Application.LoadLevel("Menu");
 	}
 }

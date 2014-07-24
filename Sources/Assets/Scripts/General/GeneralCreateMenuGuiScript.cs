@@ -34,8 +34,22 @@ public class GeneralCreateMenuGuiScript : MonoBehaviour
 		get { return _corbeaux_clip; }
 		set { _corbeaux_clip = value; }
 	}
-	
-	private bool isClient = false;
+
+	[SerializeField]
+	private bool _debugMode = false;
+	public bool DebugMode
+	{
+		get { return _debugMode; }
+		set { _debugMode = value; }
+	}
+
+	[SerializeField]
+	private bool _isClient = false;
+	public bool IsClient
+	{
+		get { return _isClient; }
+		set { _isClient = value; }
+	}
 	
 	void Start()
 	{
@@ -55,22 +69,31 @@ public class GeneralCreateMenuGuiScript : MonoBehaviour
 		GUI.Box(new Rect(Screen.width * 0.20f, Screen.height * 0.20f, Screen.width * 0.66f, Screen.height * 0.5f), string.Empty);
 		
 		GUIStyle style = new GUIStyle();
-		style.fontSize = 30;
+		style.fontSize = 40;
+		style.font = Skin.label.font;	
 		style.normal.textColor = Color.white;
-		GUI.Label(new Rect((Screen.width * 0.5f) - 50.0f, (Screen.height * 0.30f) - 10.0f, 100, 20), "Roomy House", style);
+		GUI.Label(new Rect((Screen.width * 0.45f) - 50.0f, (Screen.height * 0.30f) - 10.0f, 100, 20), "ROOMY HOUSE", style);
 		
 		if(GUI.Button(new Rect((Screen.width * 0.5f) - 25.0f, Screen.height * 0.40f, 100, 20), "START"))
 		{
-			PlayerPrefs.SetString("isClient", isClient.ToString());
+			PlayerPrefs.SetString("isClient", IsClient.ToString());
 			Application.LoadLevel("Lobby");
 		}
+
+		if(GUI.Button(new Rect((Screen.width * 0.50f) - 25.0f, Screen.height * 0.45f, 100, 20), "SETTINGS"))
+		{
+			Application.LoadLevel("Settings");
+		}
 		
-		if(GUI.Button(new Rect((Screen.width * 0.50f) - 25.0f, Screen.height * 0.45f, 100, 20), "EXIT"))
+		if(GUI.Button(new Rect((Screen.width * 0.50f) - 25.0f, Screen.height * 0.50f, 100, 20), "EXIT"))
 		{
 			Application.Quit();
 		}
-		
-		isClient = GUI.Toggle(new Rect((Screen.width * 0.50f) - 25.0f, Screen.height * 0.50f, 100, 20), isClient, "Client");
+
+		if(DebugMode) 
+		{
+			IsClient = GUI.Toggle(new Rect((Screen.width * 0.50f) - 25.0f, Screen.height * 0.55f, 100, 20), IsClient, "Client");
+		}
 	}
 	
 	void BackgroundSounds()
