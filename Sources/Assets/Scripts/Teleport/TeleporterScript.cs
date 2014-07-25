@@ -4,27 +4,27 @@ using System.Collections;
 
 public class TeleporterScript : MonoBehaviour 
 {   
-	[SerializeField]
-	private GameObject _playerPrefab;
-	public GameObject PlayerPrefab
-	{
-		get { return _playerPrefab; }
-		set { _playerPrefab = value; }
-	}
-
-	[SerializeField]
 	private Transform _destination;
-	public Transform Destination
+
+	void Start()
 	{
-		get { return _destination; }
-		set { _destination = value; }
+		_destination = GameObject.FindGameObjectWithTag("spawnSecondFloor").transform;
 	}
 
-    void OnTriggerEnter(Collider col) 
+	void OnCollisionEnter(Collision col)
     {
-		if(col.gameObject.name == "myPlayer")
+		if(networkView.isMine)
 		{
-			PlayerPrefab.rigidbody.position = Destination.position;
+			networkView.RPC("TeleportMe", RPCMode.All, col.collider.name);
+		}
+	}
+
+	[RPC]
+	void TeleportMe(string name)
+	{
+		if(name == "Teleporteur")
+		{
+			rigidbody.position = _destination.position;
 		}
 	}
 }

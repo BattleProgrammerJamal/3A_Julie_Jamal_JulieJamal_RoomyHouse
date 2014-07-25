@@ -53,7 +53,7 @@ public class ChaudronSbireCreatorScript : MonoBehaviour
 		minionSpawn = GameObject.FindGameObjectWithTag("minionSpawn");
 	}
 	
-	void FixedUpdate()
+	void Update()
 	{
 		Vector3 vPlayer = PlayerPrefab.transform.position;
 		Vector3 vChaudron = this.transform.position;
@@ -68,23 +68,20 @@ public class ChaudronSbireCreatorScript : MonoBehaviour
 	
 	void OnMouseDown()
 	{
-		if(networkView.isMine)
+		if(_isAtGoodDistance)
 		{
-			if(_isAtGoodDistance)
+			PlayerDatasScript datas = (PlayerDatasScript)NetworkConnectionInitScript.myPlayer.GetComponent<PlayerDatasScript>();
+			if(datas.RedBalls >= 5)
 			{
-				PlayerDatasScript datas = (PlayerDatasScript)NetworkConnectionInitScript.myPlayer.GetComponent(typeof(PlayerDatasScript));
-				if(datas.RedBalls >= 5)
-				{
-					Network.Instantiate(MinionPrefab, minionSpawn.transform.position, transform.rotation, 0);
-					datas.RedBalls -= 5;
-				}
+				Network.Instantiate(MinionPrefab, minionSpawn.transform.position, transform.rotation, 0);
+				datas.RedBalls -= 5;
 			}
 		}
 	}
 	
 	void OnMouseOver()
 	{
-		if(networkView.isMine)
+		if(_isAtGoodDistance)
 		{
 			Cursor.SetCursor(SbireCreateTexture, Vector2.zero, CursorMode.Auto);	
 		}
@@ -92,7 +89,7 @@ public class ChaudronSbireCreatorScript : MonoBehaviour
 	
 	void OnMouseExit()
 	{
-		if(networkView.isMine)
+		if(_isAtGoodDistance)
 		{
 			Cursor.SetCursor(BaseCursorTexture, Vector2.zero, CursorMode.Auto);	
 		}

@@ -130,24 +130,23 @@ public class PlayerDatasScript : MonoBehaviour
 		GUIStyle style = new GUIStyle();
 		style.wordWrap = true;
 		GUI.Box(new Rect(Screen.width * 0.5f - 100.0f, Screen.height * 0.5f - 50.0f, 200.0f, 100.0f), pID + " : " + PlayerName + " HAS WON !!! ", style);
-		Invoke("End", 3.0f);
+		Invoke("End", 5.0f);
 	}
 
 	[RPC]
 	void HitTarget(string name)
 	{
-		Debug.Log (name);
 		if(name == "Projectile(Clone)")
 		{
 			int val = Random.Range(0, 100);
 			
-			if(val < 25)
+			if(val < 15)
 			{
-				AdjustHealth(-25.0f);
+				AdjustHealth(-6.0f);
 			}
 			else
 			{
-				AdjustHealth(-12.0f);
+				AdjustHealth(-3.0f);
 			}
 		}
 	}

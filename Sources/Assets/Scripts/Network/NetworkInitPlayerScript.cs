@@ -4,7 +4,7 @@ using System.Collections;
 [RequireComponent(typeof(NetworkView))]
 public class NetworkInitPlayerScript : MonoBehaviour
 {
-	void OnNetworkLoadedLevel()
+	void Start()
 	{
 		if(networkView.isMine)
 		{
@@ -14,6 +14,7 @@ public class NetworkInitPlayerScript : MonoBehaviour
 			{
 				myCamera.enabled = true;	
 				myCamera.GetComponent<AudioListener>().enabled = true;
+				GameObject.FindGameObjectWithTag("minimap").GetComponent<RenderCamera2D>().Cam = myCamera;
 			}
 		}
 	}

@@ -133,7 +133,7 @@ public class PlayerUiTechnicsScript : MonoBehaviour
 			Source.PlayOneShot(ShootSound);
 			
 			timeout = false;
-			clone = (GameObject)Network.Instantiate(Projectile, MyTransform.position, MyTransform.rotation, 0);
+			clone = (GameObject)Network.Instantiate(Projectile, MyTransform.position + (MyTransform.forward * 2.0f), MyTransform.rotation, 0);
 			Physics.IgnoreCollision(clone.collider, MyTransform.collider);
 			
 			clone.rigidbody.AddForce(MyTransform.forward * Force, ForceMode.Impulse);

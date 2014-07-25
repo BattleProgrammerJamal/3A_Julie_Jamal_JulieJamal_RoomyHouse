@@ -6,7 +6,7 @@ public class NetworkInitLevelLoadedScript : MonoBehaviour
 {
 	private string disconnectedLevel = "Lobby";
 	
-	void FixedUpdate() 
+	void Update() 
 	{
 		if(Network.peerType == NetworkPeerType.Disconnected)
 		{

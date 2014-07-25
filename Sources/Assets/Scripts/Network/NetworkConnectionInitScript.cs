@@ -219,7 +219,7 @@ public class NetworkConnectionInitScript : MonoBehaviour
 	void OnConnectedToServer()
 	{
 		playing = true;
-		((GeneralCreateChatBoxScript)GetComponent<GeneralCreateChatBoxScript>()).networkView.RPC("SendChatMessage", RPCMode.AllBuffered, Name, Name + " has joined the game ! ");
+		((GeneralCreateChatBoxScript)GetComponent<GeneralCreateChatBoxScript>()).networkView.RPC("SendChatMessage", RPCMode.AllBuffered, Name, Name + " has joined the game ! \n");
 		((GeneralCreateChatBoxScript)GetComponent<GeneralCreateChatBoxScript>()).User = Name;
 	}
 	
