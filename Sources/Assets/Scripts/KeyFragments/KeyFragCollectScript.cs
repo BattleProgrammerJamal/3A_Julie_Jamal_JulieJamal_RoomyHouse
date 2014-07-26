@@ -5,6 +5,22 @@ using System.Collections;
 public class KeyFragCollectScript : MonoBehaviour 
 {
 	[SerializeField]
+	private AudioSource _source;
+	public AudioSource Source
+	{
+		get { return _source; }
+		set { _source = value; }
+	}
+	
+	[SerializeField]
+	private AudioClip _sound;
+	public AudioClip Sound
+	{
+		get { return _sound; }
+		set { _sound = value; }
+	}
+
+	[SerializeField]
 	private PlayerDatasScript _datas;
 	public PlayerDatasScript Datas 
 	{
@@ -18,6 +34,7 @@ public class KeyFragCollectScript : MonoBehaviour
 		
 		if(col.collider.name == "morceau_cle")
 		{
+			Source.PlayOneShot(Sound);
 			isMorceau = true;
 			Datas.NbCollectedFragments++;
 		}

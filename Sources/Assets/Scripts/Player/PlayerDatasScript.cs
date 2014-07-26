@@ -61,8 +61,9 @@ public class PlayerDatasScript : MonoBehaviour
 	}
 	
 	public static bool PlayingState;
-	
-	float _healthBarLength;
+	private bool show_message = false;
+	private float _healthBarLength = 0.0f;
+	private string pID = string.Empty;
 
 	void Start() 
 	{
@@ -73,45 +74,58 @@ public class PlayerDatasScript : MonoBehaviour
 		}
 	}
 	
-	void OnCollisionEnter(Collision col)
+	void Update()
 	{
-		networkView.RPC("HitTarget", RPCMode.All, col.gameObject.name);
+		if(networkView.isMine)
+		{
+			AdjustHealth(0);
+			
+			if(Health <= 0 && PlayingState)
+			{
+				if(name == "player1")
+				{
+					networkView.RPC("Victory", RPCMode.AllBuffered, "Player 2"); 
+				}
+				else
+				{
+					networkView.RPC("Victory", RPCMode.AllBuffered, "Player 1"); 
+				}
+			}
+
+			if(NbCollectedFragments >= 5 && PlayingState)
+			{
+				if(name == "player1")
+				{
+					networkView.RPC("Victory", RPCMode.AllBuffered, "Player 1"); 
+				}
+				else
+				{
+					networkView.RPC("Victory", RPCMode.AllBuffered, "Player 2"); 
+				}
+			}
+		}
 	}
 	
 	void OnGUI() 
 	{
 		if(networkView.isMine)
 		{
-			AdjustHealth(0);
-
-			if(Health <= 0)
-			{
-				if(name == "player1")
-				{
-					networkView.RPC("Victory", RPCMode.AllBuffered, "Player 2"); 
-				}
-				else
-				{
-					networkView.RPC("Victory", RPCMode.AllBuffered, "Player 1"); 
-				}
-			}
-
-			if(NbCollectedFragments >= 5)
-			{
-				if(name == "player1")
-				{
-					networkView.RPC("Victory", RPCMode.AllBuffered, "Player 1"); 
-				}
-				else
-				{
-					networkView.RPC("Victory", RPCMode.AllBuffered, "Player 2"); 
-				}
-			}
-
 			GUI.Box(new Rect(Screen.width * 0.01f, 10, Screen.width * 0.33f, 25), PlayerName); 
 			GUI.Box(new Rect(Screen.width * 0.36f, 10, Screen.width * 0.62f, 25), RedBalls + " red balls | " + YellowBalls + " yellow balls | " + GreenBalls + " green balls | " + NbCollectedFragments + " star fragments"); 
 			GUI.Box(new Rect(10, 38, 60.0f + _healthBarLength, 20), (Health * 100.0f) / MaxHealth + "%");
+		
+			if(show_message)
+			{
+				GUIStyle style = new GUIStyle();
+				style.wordWrap = true;
+				GUI.Box(new Rect(Screen.width * 0.5f - 100.0f, Screen.height * 0.5f - 50.0f, 200.0f, 100.0f), pID + " : " + PlayerName + " HAS WON !!! ", style);
+			}
 		}
+	}
+	
+	void OnCollisionEnter(Collision col)
+	{
+		networkView.RPC("HitTarget", RPCMode.All, col.gameObject.name);
 	}
 	
 	public void AdjustHealth(float health)
@@ -127,9 +141,8 @@ public class PlayerDatasScript : MonoBehaviour
 	public void Victory(string pID)
 	{
 		PlayingState = false;
-		GUIStyle style = new GUIStyle();
-		style.wordWrap = true;
-		GUI.Box(new Rect(Screen.width * 0.5f - 100.0f, Screen.height * 0.5f - 50.0f, 200.0f, 100.0f), pID + " : " + PlayerName + " HAS WON !!! ", style);
+		show_message = true;
+		pID = pID;
 		Invoke("End", 5.0f);
 	}
 

@@ -5,6 +5,22 @@ using System.Collections;
 public class PlayerThirdPersonControllerScript : MonoBehaviour 
 {
 	[SerializeField]
+	private AudioSource _source;
+	public AudioSource Source
+	{
+		get { return _source; }
+		set { _source = value; }
+	}
+	
+	[SerializeField]
+	private AudioClip _jumpSound;
+	public AudioClip JumpSound
+	{
+		get { return _jumpSound; }
+		set { _jumpSound = value; }
+	}
+
+	[SerializeField]
 	private Rigidbody _body;
 	public Rigidbody Body
 	{
@@ -60,6 +76,7 @@ public class PlayerThirdPersonControllerScript : MonoBehaviour
 				{
 					if(jumpReloaded)
 					{
+						Source.PlayOneShot(JumpSound);
 						jumpReloaded = false;
 						Body.AddForce(Vector3.up * Time.deltaTime * 10000.0f, ForceMode.Acceleration);
 						Invoke("ReloadJump", 1.0f);

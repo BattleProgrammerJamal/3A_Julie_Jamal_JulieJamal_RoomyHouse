@@ -5,7 +5,7 @@ using System.Collections;
 public class NetworkInitLevelLoadedScript : MonoBehaviour 
 {
 	private string disconnectedLevel = "Lobby";
-	
+
 	void Update() 
 	{
 		if(Network.peerType == NetworkPeerType.Disconnected)

@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class GeneralLobbySoundHandlerScript : MonoBehaviour 
+public class GeneralSoundHandlerScript : MonoBehaviour 
 {
 	[SerializeField]
 	private AudioSource _source;
@@ -32,12 +32,15 @@ public class GeneralLobbySoundHandlerScript : MonoBehaviour
 	
 	void RunSound()
 	{
-		Source.PlayOneShot(Sounds[current]);
-		Invoke("RunSound", Sounds[current].length + Random.Range(0.0f, 5.0f));
-		last = current;
-		do
+		if(Source)
 		{
-			current = Random.Range(0, Sounds.Count - 1);
-		} while(current == last);
+			Source.PlayOneShot(Sounds[current]);
+			Invoke("RunSound", Sounds[current].length + Random.Range(0.0f, 5.0f));
+			last = current;
+			do
+			{
+				current = Random.Range(0, Sounds.Count - 1);
+			} while(current == last);
+		}
 	}
 }

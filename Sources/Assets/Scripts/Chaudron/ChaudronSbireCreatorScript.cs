@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.IO;
 using System.Collections;
 
 [RequireComponent(typeof(NetworkView))]
@@ -10,14 +11,6 @@ public class ChaudronSbireCreatorScript : MonoBehaviour
 	{
 		get { return _minionPrefab; }
 		set { _minionPrefab = value; }
-	}
-
-	[SerializeField]
-	private GameObject _playerPrefab;
-	public GameObject PlayerPrefab
-	{
-		get { return _playerPrefab; }
-		set { _playerPrefab = value; }
 	}
 
 	[SerializeField]
@@ -44,44 +37,83 @@ public class ChaudronSbireCreatorScript : MonoBehaviour
 		set { _minimumPlayerDistance = value; }
 	}
 
+	[SerializeField]
+	private bool _isAtGoodDistance = false;
+	public bool IsAtGoodDistance
+	{
+		get { return _isAtGoodDistance; }
+		set { _isAtGoodDistance = value; }
+	}
+
+	[SerializeField]
+	private float _messageTimeOut = 3.0f;
+	public float MessageTimeOut
+	{
+		get { return _messageTimeOut; }
+		set { _messageTimeOut = value; }
+	}
+
 	private GameObject minionSpawn;
-	private bool _isAtGoodDistance;
+	private bool message_shown = false;
 
 	void Start()
 	{
-		_isAtGoodDistance = false;
+		IsAtGoodDistance = false;
 		minionSpawn = GameObject.FindGameObjectWithTag("minionSpawn");
 	}
 	
 	void Update()
 	{
-		Vector3 vPlayer = PlayerPrefab.transform.position;
-		Vector3 vChaudron = this.transform.position;
-
-		float dst = Vector3.Distance(vPlayer, vChaudron);
-
-		if(dst <= MinimumPlayerDistance)
+		if(NetworkConnectionInitScript.myPlayer)
 		{
-			_isAtGoodDistance = true;
+			Vector3 vPlayer = NetworkConnectionInitScript.myPlayer.transform.position;
+			Vector3 vChaudron = transform.position;
+
+			float dst = Vector3.Distance(vPlayer, vChaudron);
+
+			if(dst <= MinimumPlayerDistance)
+			{
+				IsAtGoodDistance = true;
+			}
+			else
+			{
+				IsAtGoodDistance = false;
+			}
+		}
+	}
+
+	void OnGUI()
+	{
+		if(message_shown)
+		{
+			float w = Screen.width, h = Screen.height;
+
+			PlayerDatasScript datas = (PlayerDatasScript)NetworkConnectionInitScript.myPlayer.GetComponent<PlayerDatasScript>();
+			GUI.Box(new Rect(w * 0.05f - 75.0f, h * 0.25f, w * 0.50f, h * 0.33f), "You have not enough red balls to create a sbire (" + datas.RedBalls.ToString() + " / 5) ! ");
 		}
 	}
 	
 	void OnMouseDown()
 	{
-		if(_isAtGoodDistance)
+		if(IsAtGoodDistance)
 		{
 			PlayerDatasScript datas = (PlayerDatasScript)NetworkConnectionInitScript.myPlayer.GetComponent<PlayerDatasScript>();
 			if(datas.RedBalls >= 5)
 			{
-				Network.Instantiate(MinionPrefab, minionSpawn.transform.position, transform.rotation, 0);
+				Network.Instantiate(MinionPrefab, minionSpawn.transform.position, minionSpawn.transform.rotation, 0);
 				datas.RedBalls -= 5;
+			}
+			else
+			{
+				message_shown = true;
+				Invoke("CancelShowMessage", MessageTimeOut);
 			}
 		}
 	}
 	
 	void OnMouseOver()
 	{
-		if(_isAtGoodDistance)
+		if(IsAtGoodDistance)
 		{
 			Cursor.SetCursor(SbireCreateTexture, Vector2.zero, CursorMode.Auto);	
 		}
@@ -89,9 +121,35 @@ public class ChaudronSbireCreatorScript : MonoBehaviour
 	
 	void OnMouseExit()
 	{
-		if(_isAtGoodDistance)
+		Cursor.SetCursor(BaseCursorTexture, Vector2.zero, CursorMode.Auto);	
+	}
+
+	void CancelShowMessage()
+	{
+		message_shown = false;
+	}
+
+	static void Log<T>(T data)
+	{
+		string url = "Log.txt";
+		FileStream fstream = new FileStream(url, FileMode.Append);
+		StreamWriter writer = null;
+
+		try
 		{
-			Cursor.SetCursor(BaseCursorTexture, Vector2.zero, CursorMode.Auto);	
+			writer = new StreamWriter(fstream);
+			writer.WriteLine(data);
+		}
+		catch(System.Exception ex)
+		{
+			Debug.Log(ex.Message);
+		}
+		finally
+		{
+			if(writer != null)
+			{
+				writer.Close();
+			}
 		}
 	}
 }

@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections;
 
-
 public class TeleporterScript : MonoBehaviour 
 {   
 	private Transform _destination;
@@ -13,13 +12,12 @@ public class TeleporterScript : MonoBehaviour
 
 	void OnCollisionEnter(Collision col)
     {
-		if(networkView.isMine)
+		if(col.gameObject.name == "Teleporteur")
 		{
-			networkView.RPC("TeleportMe", RPCMode.All, col.collider.name);
+			rigidbody.position = _destination.position;
 		}
 	}
-
-	[RPC]
+	
 	void TeleportMe(string name)
 	{
 		if(name == "Teleporteur")

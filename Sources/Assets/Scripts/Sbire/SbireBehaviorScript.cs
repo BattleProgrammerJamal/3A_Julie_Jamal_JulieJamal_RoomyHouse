@@ -179,13 +179,15 @@ public class SbireBehaviorScript : MonoBehaviour
 		for(i = 0; i < yellowBalls.Length; ++i){ objects[index] = yellowBalls[i]; ++index; }
 		for(i = 0; i < greenBalls.Length; ++i){ objects[index] = greenBalls[i]; ++index; }
 		for(i = 0; i < keyFragments.Length; ++i){ objects[index] = keyFragments[i]; ++index; }
-		
+
+		/*
 		bool found = false;
 		
 		for(i = 0; i < objects.Length; ++i)
 		{
 			
 		}
+		*/
 	}
 	
 	void HandlePicking()
