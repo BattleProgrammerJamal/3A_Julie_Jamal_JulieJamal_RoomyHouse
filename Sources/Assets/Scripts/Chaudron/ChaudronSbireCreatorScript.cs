@@ -53,6 +53,14 @@ public class ChaudronSbireCreatorScript : MonoBehaviour
 		set { _messageTimeOut = value; }
 	}
 
+	[SerializeField]
+	private GUISkin _skin;
+	public GUISkin Skin
+	{
+		get { return _skin; }
+		set { _skin = value; }	
+	}
+
 	private GameObject minionSpawn;
 	private bool message_shown = false;
 
@@ -88,8 +96,10 @@ public class ChaudronSbireCreatorScript : MonoBehaviour
 		{
 			float w = Screen.width, h = Screen.height;
 
+			GUI.skin = Skin;
+
 			PlayerDatasScript datas = (PlayerDatasScript)NetworkConnectionInitScript.myPlayer.GetComponent<PlayerDatasScript>();
-			GUI.Box(new Rect(w * 0.05f - 75.0f, h * 0.25f, w * 0.50f, h * 0.33f), "You have not enough red balls to create a sbire (" + datas.RedBalls.ToString() + " / 5) ! ");
+			GUI.Box(new Rect(w * 0.33f, h * 0.25f, w * 0.33f, h * 0.25f), "You have not enough red balls to create a sbire (" + datas.RedBalls.ToString() + " / 5) ! ");
 		}
 	}
 	

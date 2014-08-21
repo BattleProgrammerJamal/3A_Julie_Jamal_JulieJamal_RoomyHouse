@@ -21,21 +21,19 @@ public class NetworkInitPlayerScript : MonoBehaviour
 	}
 
 	[SerializeField]
-	private AudioClip _wallSound;
-	public AudioClip WallSound
+	private AudioClip[] _wallSounds;
+	public AudioClip[] WallSounds
 	{
-		get { return _wallSound; }
-		set { _wallSound = value; }
+		get { return _wallSounds; }
+		set { _wallSounds = value; }
 	}
 
 	void Start()
 	{
 		if(networkView.isMine)
 		{
-			audio.volume = 1.0f;
 			Source.PlayOneShot(LetsPlay);
-			audio.volume = 0.0f;
-			Invoke("PlayWallSound", LetsPlay.length);
+			Invoke("PlayWallSounds", LetsPlay.length);
 
 			GetComponent<PlayerDatasScript>().PlayerName = PlayerPrefs.GetString("player_name");
 			Camera myCamera = GetComponentInChildren<Camera>();
@@ -48,9 +46,12 @@ public class NetworkInitPlayerScript : MonoBehaviour
 		}
 	}
 
-	void PlayWallSound()
+	void PlayWallSounds()
 	{
-		Source.PlayOneShot(WallSound);
-		audio.volume = 1.0f;
+		for(int i = 0; i < WallSounds.Length; ++i)
+		{
+			Source.volume = 0.85f;
+			Source.PlayOneShot(WallSounds[i]);
+		}
 	}
 }

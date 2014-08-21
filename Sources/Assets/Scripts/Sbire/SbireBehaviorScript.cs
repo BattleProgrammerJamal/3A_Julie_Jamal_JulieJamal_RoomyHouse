@@ -1,10 +1,17 @@
 using UnityEngine;
 using System.Collections;
 
-[RequireComponent(typeof(NetworkView))]
 public class SbireBehaviorScript : MonoBehaviour 
 {
 	public enum MinionState { IDLE, FOLLOW, ATTACK, SEARCH };
+	
+	[SerializeField]
+	private GameObject _player;
+	public GameObject Player
+	{
+		get { return _player; }
+		set { _player = value; }
+	}
 	
 	[SerializeField]
 	private MinionState _state = MinionState.IDLE;
@@ -13,7 +20,7 @@ public class SbireBehaviorScript : MonoBehaviour
 		get { return _state; }
 		set { _state = value; }
 	}
-
+	
 	[SerializeField]
 	private NavMeshAgent _agent;
 	public NavMeshAgent Agent
@@ -53,84 +60,87 @@ public class SbireBehaviorScript : MonoBehaviour
 		get { return _searchButtonTexture; }
 		set { _searchButtonTexture = value; }
 	}
-
-	private GameObject _player;
+	
 	private bool _selected;
-   
-    void Start() 
-    {
+	
+	void Start() 
+	{
 		if(networkView.isMine)
 		{
-			_selected = true;
-			_player = NetworkConnectionInitScript.myPlayer;
+			_selected = false;
 		}
-    }
-    
-    void FixedUpdate() 
-    {
+	}
+	
+	void FixedUpdate() 
+	{
 		if(networkView.isMine)
 		{
-			HandlePicking();
-			
 			switch(State)
 			{
 				case MinionState.IDLE:
 					Idle();
 				break;
-				
+					
 				case MinionState.FOLLOW:
 					Follow();
 				break;
-				
+					
 				case MinionState.ATTACK:
 					Attack();
 				break;
-				
+					
 				case MinionState.SEARCH:
 					Search();
 				break;
-				
+					
 				default:
 					Idle();
 				break;
 			}
 		}
-    }
+	}
+	
+	void OnMouseDown()
+	{
+		if(networkView.isMine)
+		{
+			_selected = !_selected;
+		}
+	}
 	
 	void OnGUI()
 	{
-		if(_selected)
+		if(_selected && networkView.isMine)
 		{
-			GUILayout.BeginArea(new Rect(Screen.width * 0.38f, Screen.height * 0.85f, Screen.width * 0.60f, Screen.height * 0.15f));
+			GUILayout.BeginArea(new Rect(Screen.width * 0.38f, Screen.height * 0.70f, Screen.width * 0.60f, Screen.height * 0.15f));
 			GUILayout.BeginHorizontal();
-			
-			bool deselect = true;
 			
 			if(GUILayout.Button(IdleButtonTexture, GUILayout.Width(64), GUILayout.Height(64)))
 			{
 				State = MinionState.IDLE;
-				deselect = false;
+				_selected = true;
 			}
-		
+			
 			if(GUILayout.Button(FollowButtonTexture, GUILayout.Width(64), GUILayout.Height(64)))
 			{
 				State = MinionState.FOLLOW;
+				_selected = false;
 			}
 			
 			if(GUILayout.Button(AttackButtonTexture, GUILayout.Width(64), GUILayout.Height(64)))
 			{
 				State = MinionState.ATTACK;
+				_selected = false;
 			}
 			
 			if(GUILayout.Button(SearchButtonTexture, GUILayout.Width(64), GUILayout.Height(64)))
 			{
 				State = MinionState.SEARCH;
+				_selected = false;
 			}
 			
 			GUILayout.EndHorizontal();
 			GUILayout.EndArea();
-			
-			if(deselect){ _selected = false; }
 		}
 	}
 	
@@ -146,7 +156,7 @@ public class SbireBehaviorScript : MonoBehaviour
 				
 				if(Physics.Raycast(ray, out hit))
 				{
-					if(hit.collider.name != this.collider.name)
+					if(!hit.collider.name.Equals(this.collider.name))
 					{
 						Agent.SetDestination(hit.point);
 					}
@@ -157,7 +167,7 @@ public class SbireBehaviorScript : MonoBehaviour
 	
 	void Follow()
 	{
-		Agent.SetDestination(_player.transform.position);
+		Agent.SetDestination(Player.transform.position);
 	}
 	
 	void Attack()
@@ -179,7 +189,7 @@ public class SbireBehaviorScript : MonoBehaviour
 		for(i = 0; i < yellowBalls.Length; ++i){ objects[index] = yellowBalls[i]; ++index; }
 		for(i = 0; i < greenBalls.Length; ++i){ objects[index] = greenBalls[i]; ++index; }
 		for(i = 0; i < keyFragments.Length; ++i){ objects[index] = keyFragments[i]; ++index; }
-
+		
 		/*
 		bool found = false;
 		
@@ -188,27 +198,5 @@ public class SbireBehaviorScript : MonoBehaviour
 			
 		}
 		*/
-	}
-	
-	void HandlePicking()
-	{
-		RaycastHit hit;
-		
-        if(Input.GetMouseButtonDown(0)) 
-		{
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-			
-            if(Physics.Raycast(ray, out hit))
-			{
-                if(hit.collider.name == this.collider.name)
-				{
-					_selected = true;
-				}
-				else
-				{
-					_selected = false;
-				}
-			}
-		}
 	}
 }

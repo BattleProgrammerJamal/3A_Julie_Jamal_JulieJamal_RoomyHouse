@@ -59,17 +59,52 @@ public class PlayerDatasScript : MonoBehaviour
 		get { return _nbCollectedFragments; }
 		set { _nbCollectedFragments = value; }
 	}
+
+	[SerializeField]
+	private GUISkin _skin;
+	public GUISkin Skin
+	{
+		get { return _skin; }
+		set { _skin = value; }	
+	}
+
+	[SerializeField]
+	private Object _persistentLobbyOnload;
+	public Object PersistentLobbyOnload
+	{
+		get { return _persistentLobbyOnload; }
+		set { _persistentLobbyOnload = value; }
+	}
+
+	[SerializeField]
+	private string _victoryMessage = string.Empty;
+	public string VictoryMessage
+	{
+		get { return _victoryMessage; }
+		set { _victoryMessage = value; }
+	}
+
+	[SerializeField]
+	private bool _showMessage = false;
+	public bool ShowMessage
+	{
+		get { return _showMessage; }
+		set { _showMessage = value; }
+	}
 	
 	public static bool PlayingState;
-	private bool show_message = false;
+	private bool victory = false;
+	private bool end = false;
 	private float _healthBarLength = 0.0f;
-	private string pID = string.Empty;
 
 	void Start() 
 	{
 		if(networkView.isMine)
 		{
+			VictoryMessage = string.Empty;
 			PlayingState = true;
+			ShowMessage = false;
+			end = false;
 			_healthBarLength = Screen.width / 2;
 		}
 	}
@@ -79,28 +114,34 @@ public class PlayerDatasScript : MonoBehaviour
 		if(networkView.isMine)
 		{
 			AdjustHealth(0);
-			
-			if(Health <= 0 && PlayingState)
+
+			if(Health == 0 || NbCollectedFragments >= 5)
 			{
-				if(name == "player1")
-				{
-					networkView.RPC("Victory", RPCMode.AllBuffered, "Player 2"); 
-				}
-				else
-				{
-					networkView.RPC("Victory", RPCMode.AllBuffered, "Player 1"); 
-				}
+				end = true;
 			}
 
-			if(NbCollectedFragments >= 5 && PlayingState)
+			if(PlayingState)
 			{
-				if(name == "player1")
+				if(end)
 				{
-					networkView.RPC("Victory", RPCMode.AllBuffered, "Player 1"); 
-				}
-				else
-				{
-					networkView.RPC("Victory", RPCMode.AllBuffered, "Player 2"); 
+					Toolkit.Log<string>("END: " + PlayerName + "; " + VictoryMessage);
+					if(Health == 0)
+					{
+						victory = false;
+						VictoryMessage = "YOU HAVE LOST, TRY AGAIN ... ";
+						FlyingTrisRun();
+					}
+					
+					if(NbCollectedFragments >= 5)
+					{
+						victory = true;
+						VictoryMessage = "CONGRATULATIONS " + PlayerName + ", YOU HAVE WON !!!! ";
+					}
+
+					PlayingState = false;
+					ShowMessage = true;
+					networkView.RPC("Victory", RPCMode.Others, victory);
+					Invoke("End", 5.0f);
 				}
 			}
 		}
@@ -114,18 +155,12 @@ public class PlayerDatasScript : MonoBehaviour
 			GUI.Box(new Rect(Screen.width * 0.36f, 10, Screen.width * 0.62f, 25), RedBalls + " red balls | " + YellowBalls + " yellow balls | " + GreenBalls + " green balls | " + NbCollectedFragments + " star fragments"); 
 			GUI.Box(new Rect(10, 38, 60.0f + _healthBarLength, 20), (Health * 100.0f) / MaxHealth + "%");
 		
-			if(show_message)
+			if(ShowMessage)
 			{
-				GUIStyle style = new GUIStyle();
-				style.wordWrap = true;
-				GUI.Box(new Rect(Screen.width * 0.5f - 100.0f, Screen.height * 0.5f - 50.0f, 200.0f, 100.0f), pID + " : " + PlayerName + " HAS WON !!! ", style);
+				GUI.skin = Skin;
+				GUI.Box(new Rect(Screen.width * 0.33f, Screen.height * 0.25f, Screen.width * 0.33f, Screen.height * 0.25f), VictoryMessage);
 			}
 		}
-	}
-	
-	void OnCollisionEnter(Collision col)
-	{
-		networkView.RPC("HitTarget", RPCMode.All, col.gameObject.name);
 	}
 	
 	public void AdjustHealth(float health)
@@ -138,38 +173,60 @@ public class PlayerDatasScript : MonoBehaviour
 	}
 
 	[RPC]
-	public void Victory(string pID)
+	public void Victory(bool victory)
 	{
-		PlayingState = false;
-		show_message = true;
-		pID = pID;
-		Invoke("End", 5.0f);
-	}
-
-	[RPC]
-	void HitTarget(string name)
-	{
-		if(name == "Projectile(Clone)")
+		if(Network.peerType != NetworkPeerType.Server)
 		{
-			int val = Random.Range(0, 100);
-			
-			if(val < 15)
+			ShowMessage = true;
+			PlayingState = false;
+			if(!victory)
 			{
-				AdjustHealth(-6.0f);
+				VictoryMessage = "CONGRATULATIONS " + PlayerName + ", YOU HAVE WON !!!! ";
 			}
 			else
 			{
-				AdjustHealth(-3.0f);
+				VictoryMessage = "YOU HAVE LOST, TRY AGAIN ... ";
+				FlyingTrisRun();
 			}
+			Invoke("End", 5.0f);
 		}
 	}
 
 	public void End()
 	{
-		PlayingState = true;
+		ShowMessage = false;
 		Network.RemoveRPCs(Network.player);
 		Network.DestroyPlayerObjects(Network.player);
 		Network.Disconnect();
+		DestroyImmediate(PersistentLobbyOnload, true);
 		Application.LoadLevel("Menu");
+	}
+
+	void FlyingTrisRun()
+	{
+		GetComponent<FXFlyingTrianglesScript>().Fly();
+	}
+
+	void OnCollisionEnter(Collision col)
+	{
+		networkView.RPC("HitTarget", RPCMode.All, col.gameObject.name);
+	}
+
+	[RPC]
+	void HitTarget(string name)
+	{
+		if(name.Equals("Projectile(Clone)"))
+		{
+			int val = Random.Range(0, 100);
+			
+			if(val < 15)
+			{
+				AdjustHealth(-15.0f);
+			}
+			else
+			{
+				AdjustHealth(-5.0f);
+			}
+		}
 	}
 }

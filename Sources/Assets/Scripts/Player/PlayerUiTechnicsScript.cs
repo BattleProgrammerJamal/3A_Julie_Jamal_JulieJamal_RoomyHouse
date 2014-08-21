@@ -85,43 +85,46 @@ public class PlayerUiTechnicsScript : MonoBehaviour
 	
 	void OnGUI()
 	{
-		GUILayout.BeginArea(new Rect(Screen.width * 0.38f, Screen.height * 0.85f, Screen.width * 0.60f, Screen.height * 0.15f));
-		GUILayout.BeginHorizontal();
-		
-		if(GUILayout.Button(FireBallTexture, GUILayout.Width(64), GUILayout.Height(64)))
+		if(PlayerDatasScript.PlayingState)
 		{
-			Invoke("ProjectileCreation", 0.01f);
-		}
-	
-		if(GUILayout.Button(MenuInGameTexture, GUILayout.Width(64), GUILayout.Height(64)) || Input.GetKeyUp(Key))
-		{
-			if(!_activeTimeout)
-			{
-				_showMenu = !_showMenu;	
-				_activeTimeout = true;
-				Invoke("Timeout", 0.5f);
-			}
-		}
-		
-		GUILayout.EndHorizontal();
-		GUILayout.EndArea();
-		
-		if(_showMenu)
-		{
-			GUI.Box(new Rect(Screen.width * 0.33f, Screen.height * 0.33f, Screen.width * 0.33f, Screen.height * 0.5f), string.Empty);		
-			GUI.Label(new Rect(Screen.width * 0.37f + (Screen.width * 0.33f / 3), Screen.height * 0.38f, 125, 20), "MENU");
+			GUILayout.BeginArea(new Rect(Screen.width * 0.38f, Screen.height * 0.85f, Screen.width * 0.60f, Screen.height * 0.15f));
+			GUILayout.BeginHorizontal();
 			
-			if(GUI.Button(new Rect(Screen.width * 0.33f + (Screen.width * 0.33f / 3), Screen.height * 0.44f, 125, 20), "Continue"))
+			if(GUILayout.Button(FireBallTexture, GUILayout.Width(64), GUILayout.Height(64)))
 			{
-				_showMenu = false;
+				Invoke("ProjectileCreation", 0.01f);
+			}
+		
+			if(GUILayout.Button(MenuInGameTexture, GUILayout.Width(64), GUILayout.Height(64)) || Input.GetKeyUp(Key))
+			{
+				if(!_activeTimeout)
+				{
+					_showMenu = !_showMenu;	
+					_activeTimeout = true;
+					Invoke("Timeout", 0.5f);
+				}
 			}
 			
-			if(GUI.Button(new Rect(Screen.width * 0.33f + (Screen.width * 0.33f / 3), Screen.height * 0.50f, 125, 20), "Exit"))
+			GUILayout.EndHorizontal();
+			GUILayout.EndArea();
+			
+			if(_showMenu)
 			{
-				Network.RemoveRPCs(Network.player);
-				Network.DestroyPlayerObjects(Network.player);
-				Network.Disconnect();
-				Application.LoadLevel(disconnectedLevel);
+				GUI.Box(new Rect(Screen.width * 0.33f, Screen.height * 0.33f, Screen.width * 0.33f, Screen.height * 0.5f), string.Empty);		
+				GUI.Label(new Rect(Screen.width * 0.37f + (Screen.width * 0.33f / 3), Screen.height * 0.38f, 125, 20), "MENU");
+				
+				if(GUI.Button(new Rect(Screen.width * 0.33f + (Screen.width * 0.33f / 3), Screen.height * 0.44f, 125, 20), "Continue"))
+				{
+					_showMenu = false;
+				}
+				
+				if(GUI.Button(new Rect(Screen.width * 0.33f + (Screen.width * 0.33f / 3), Screen.height * 0.50f, 125, 20), "Exit"))
+				{
+					Network.RemoveRPCs(Network.player);
+					Network.DestroyPlayerObjects(Network.player);
+					Network.Disconnect();
+					Application.LoadLevel(disconnectedLevel);
+				}
 			}
 		}
 	}

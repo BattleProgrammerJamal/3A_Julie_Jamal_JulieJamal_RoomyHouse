@@ -64,7 +64,7 @@ public class GeneralCreateMenuGuiScript : MonoBehaviour
 		{
 			Application.Quit();	
 		}
-		
+
 		GUI.DrawTexture(new Rect(0.0f, 0.0f, Screen.width, Screen.height), Background);
 		GUI.Box(new Rect(Screen.width * 0.20f, Screen.height * 0.20f, Screen.width * 0.66f, Screen.height * 0.5f), string.Empty);
 		
