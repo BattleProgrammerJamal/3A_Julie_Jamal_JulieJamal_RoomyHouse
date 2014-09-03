@@ -1,0 +1,80 @@
+# Blender MTL File: 'pgmurhct2.blend'
+# Material Count: 7
+
+newmtl body
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd pgmurhct2_tex/body.jpg
+map_Ks pgmurhct2_tex/body_s.jpg
+map_Ns pgmurhct2_tex/body_s.jpg
+
+newmtl boltlaras
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd pgmurhct2_tex/boltlaras.jpg
+map_Ks pgmurhct2_tex/boltlaras_s.jpg
+map_Ns pgmurhct2_tex/boltlaras_s.jpg
+
+newmtl bullet
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.396791 0.118834 0.014153
+Ks 0.991228 0.991228 0.991228
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl gripstock
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd pgmurhct2_tex/gripstock.jpg
+map_Ks pgmurhct2_tex/gripstock_S.jpg
+map_Ns pgmurhct2_tex/gripstock_S.jpg
+
+newmtl magpod
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd pgmurhct2_tex/magpod.jpg
+map_Ks pgmurhct2_tex/magpod_s.jpg
+map_Ns pgmurhct2_tex/magpod_s.jpg
+
+newmtl scope
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd pgmurhct2_tex/scope.jpg
+map_Ks pgmurhct2_tex/scope_s.jpg
+map_Ns pgmurhct2_tex/scope_s.jpg
+
+newmtl shell
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.590328 0.296990 0.030564
+Ks 0.991228 0.991228 0.991228
+Ni 1.000000
+d 1.000000
+illum 2
