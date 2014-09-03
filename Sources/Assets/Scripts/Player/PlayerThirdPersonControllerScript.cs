@@ -45,13 +45,12 @@ public class PlayerThirdPersonControllerScript : MonoBehaviour
 	}
 	
 	private bool jumpReloaded = true;
-	private bool sound_run = false;
 	
 	void FixedUpdate() 
 	{
 		if(networkView.isMine)
 		{
-			if(PlayerEndOfPartyScript.PlayingState)
+			if(PlayerDatasScript.PlayingState)
 			{
 				if(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.Q))
 				{
@@ -83,13 +82,6 @@ public class PlayerThirdPersonControllerScript : MonoBehaviour
 						Invoke("ReloadJump", 1.0f);
 					}
 				}
-			}
-
-			DidactitielScript scriptt = GameObject.Find("OnLoadPlay").GetComponent<DidactitielScript>();
-			if(!sound_run && scriptt.IsStep(3))
-			{
-				sound_run = true;
-				scriptt.Next();
 			}
 		}
 	}

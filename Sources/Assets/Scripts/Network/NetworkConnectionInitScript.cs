@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 
 [RequireComponent(typeof(NetworkView))]
 public class NetworkConnectionInitScript : MonoBehaviour 
@@ -207,6 +206,7 @@ public class NetworkConnectionInitScript : MonoBehaviour
 			Network.RemoveRPCsInGroup(1);
 			
 			int n = Random.Range(0, levels.Length);
+			n = 0;
 			networkView.RPC("LoadClientLevel", RPCMode.Others, levels[n].ToString(), lastprefix + 1);
 		}
 	}
@@ -226,7 +226,7 @@ public class NetworkConnectionInitScript : MonoBehaviour
 	void OnDisconnectedFromServer()
 	{
 		playing = false;
-		//Network.RemoveRPCs(Network.player);
+		Network.RemoveRPCs(Network.player);
 		Network.DestroyPlayerObjects(Network.player);
 		Application.LoadLevel(disconnectedLevel);
 	}
@@ -300,7 +300,7 @@ public class NetworkConnectionInitScript : MonoBehaviour
 	{
 		Object player = Network.Instantiate(PlayerPrefab, location, Quaternion.identity, 0);
 		myPlayer = (GameObject)player;
+		//	myPlayer.name = "player" + id.ToString ();
 		myPlayer.name = "myPlayer";
-		myPlayer.tag = "player_" + id.ToString ();
 	}
 }

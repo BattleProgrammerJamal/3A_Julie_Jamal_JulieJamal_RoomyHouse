@@ -43,8 +43,6 @@ public class LightBallsCollectScript : MonoBehaviour
 		get { return _datas; }
 		set { _datas = value; }
 	}
-
-	private bool sound_run = false;
 	
 	void OnCollisionEnter(Collision col)
 	{
@@ -76,12 +74,6 @@ public class LightBallsCollectScript : MonoBehaviour
 		
 		if(isSphere)
 		{
-			DidactitielScript script = GameObject.Find("OnLoadPlay").GetComponent<DidactitielScript>();
-			if(!sound_run && script.IsStep(1))
-			{
-				sound_run = true;
-				script.Next();
-			}
 			Network.Destroy(col.gameObject);
 		}
 	}

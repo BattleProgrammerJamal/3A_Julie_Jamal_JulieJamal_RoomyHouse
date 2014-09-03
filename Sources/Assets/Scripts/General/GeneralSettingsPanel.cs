@@ -55,40 +55,7 @@ public class GeneralSettingsPanel : MonoBehaviour
 				GUILayout.BeginVertical();
 					GUILayout.BeginHorizontal();
 						GUILayout.Label(ParamNames[i]);
-						if(Params[i].Equals("True") || Params[i].Equals("False"))
-						{
-							bool result = (Params[i].Equals("True")) ? true : false;
-							Params[i] = (GUILayout.Toggle(result, string.Empty)).ToString();
-						}
-						else
-						{
-							if(ParamNames[i].Equals("Chapeaux"))
-							{
-								string[] chapeaux = Params[i].Split(new char[] { ';' });
-								string[] chapeauxx = new string[chapeaux.Length - 1];
-								int result = int.Parse(chapeaux[0]);
-
-								for(int k = 1; k < chapeaux.Length; ++k)
-								{
-									chapeauxx[k - 1] = chapeaux[k];
-								}
-
-								result = GUILayout.SelectionGrid(result, chapeauxx, 3);
-
-								string str_res = result.ToString() + ";";
-								
-								for(int k = 0; k < chapeauxx.Length; ++k)
-								{
-									if(k == chapeauxx.Length - 1) { str_res += chapeauxx[k]; } else { str_res += chapeauxx[k] + ";"; }
-								}
-
-								Params[i] = str_res;
-							}
-							else
-							{
-								Params[i] = GUILayout.TextField(Params[i], 35);
-							}
-						}
+						Params[i] = GUILayout.TextField(Params[i], 35);
 					GUILayout.EndHorizontal();
 				GUILayout.EndVertical();
 				

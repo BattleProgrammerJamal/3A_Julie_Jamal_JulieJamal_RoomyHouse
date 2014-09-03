@@ -50,9 +50,6 @@ public class GeneralCreateMenuGuiScript : MonoBehaviour
 		get { return _isClient; }
 		set { _isClient = value; }
 	}
-
-	public static bool Didactitiel;
-	public static int Chapeau_Id;
 	
 	void Start()
 	{
