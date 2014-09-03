@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 [RequireComponent(typeof(NetworkView))]
 public class PlayerDatasScript : MonoBehaviour 
@@ -61,50 +62,63 @@ public class PlayerDatasScript : MonoBehaviour
 	}
 
 	[SerializeField]
-	private GUISkin _skin;
-	public GUISkin Skin
+	private Texture[] _fragsStar2D;
+	public Texture[] FragsStar2D
 	{
-		get { return _skin; }
-		set { _skin = value; }	
+		get { return _fragsStar2D; }
+		set { _fragsStar2D = value; }
 	}
 
 	[SerializeField]
-	private Object _persistentLobbyOnload;
-	public Object PersistentLobbyOnload
+	private GUISkin _enemyNameSkin;
+	public GUISkin EnemyNameSkin
 	{
-		get { return _persistentLobbyOnload; }
-		set { _persistentLobbyOnload = value; }
+		get { return _enemyNameSkin; }
+		set { _enemyNameSkin = value; }
 	}
 
-	[SerializeField]
-	private string _victoryMessage = string.Empty;
-	public string VictoryMessage
-	{
-		get { return _victoryMessage; }
-		set { _victoryMessage = value; }
-	}
-
-	[SerializeField]
-	private bool _showMessage = false;
-	public bool ShowMessage
-	{
-		get { return _showMessage; }
-		set { _showMessage = value; }
-	}
-	
-	public static bool PlayingState;
-	private bool victory = false;
-	private bool end = false;
 	private float _healthBarLength = 0.0f;
 
 	void Start() 
 	{
 		if(networkView.isMine)
 		{
-			VictoryMessage = string.Empty;
-			PlayingState = true;
-			ShowMessage = false;
-			end = false;
+			if(GeneralCreateMenuGuiScript.Chapeau_Id == 0 || GeneralCreateMenuGuiScript.Chapeau_Id == 1)
+			{
+				foreach(Component obj in this.transform.GetComponentsInChildren<Component>())
+				{
+					if(GeneralCreateMenuGuiScript.Chapeau_Id == 0 && obj.name.Equals("Hat1"))
+					{
+						obj.gameObject.SetActive(false);
+					}
+
+					if(GeneralCreateMenuGuiScript.Chapeau_Id == 0 && obj.name.Equals("Hat2"))
+					{
+						obj.gameObject.SetActive(true);
+					}
+
+					if(GeneralCreateMenuGuiScript.Chapeau_Id == 1 && obj.name.Equals("Hat1"))
+					{
+						obj.gameObject.SetActive(true);
+					}
+					
+					if(GeneralCreateMenuGuiScript.Chapeau_Id == 1 && obj.name.Equals("Hat2"))
+					{
+						obj.gameObject.SetActive(false);
+					}
+				}
+			}
+			else
+			{
+				foreach(Component obj in this.transform.GetComponentsInChildren<Component>())
+				{
+					if(obj.name.Equals("Hat1") || obj.name.Equals("Hat2"))
+					{
+						obj.gameObject.SetActive(false);
+					}
+				}
+			}
+
 			_healthBarLength = Screen.width / 2;
 		}
 	}
@@ -113,56 +127,79 @@ public class PlayerDatasScript : MonoBehaviour
 	{
 		if(networkView.isMine)
 		{
+			string datas = PlayerName + ";" + MaxHealth.ToString() + ";" + Health.ToString() + ";" + RedBalls.ToString() + ";" + YellowBalls.ToString() + ";" + GreenBalls.ToString()
+				+ ";" + NbCollectedFragments.ToString();
+			networkView.RPC("SynchronizePlayerDatas", RPCMode.Others, datas);
 			AdjustHealth(0);
-
-			if(Health == 0 || NbCollectedFragments >= 5)
-			{
-				end = true;
-			}
-
-			if(PlayingState)
-			{
-				if(end)
-				{
-					Toolkit.Log<string>("END: " + PlayerName + "; " + VictoryMessage);
-					if(Health == 0)
-					{
-						victory = false;
-						VictoryMessage = "YOU HAVE LOST, TRY AGAIN ... ";
-						FlyingTrisRun();
-					}
-					
-					if(NbCollectedFragments >= 5)
-					{
-						victory = true;
-						VictoryMessage = "CONGRATULATIONS " + PlayerName + ", YOU HAVE WON !!!! ";
-					}
-
-					PlayingState = false;
-					ShowMessage = true;
-					networkView.RPC("Victory", RPCMode.Others, victory);
-					Invoke("End", 5.0f);
-				}
-			}
 		}
 	}
-	
+
 	void OnGUI() 
 	{
 		if(networkView.isMine)
 		{
-			GUI.Box(new Rect(Screen.width * 0.01f, 10, Screen.width * 0.33f, 25), PlayerName); 
-			GUI.Box(new Rect(Screen.width * 0.36f, 10, Screen.width * 0.62f, 25), RedBalls + " red balls | " + YellowBalls + " yellow balls | " + GreenBalls + " green balls | " + NbCollectedFragments + " star fragments"); 
-			GUI.Box(new Rect(10, 38, 60.0f + _healthBarLength, 20), (Health * 100.0f) / MaxHealth + "%");
-		
-			if(ShowMessage)
+			switch(NbCollectedFragments)
 			{
-				GUI.skin = Skin;
-				GUI.Box(new Rect(Screen.width * 0.33f, Screen.height * 0.25f, Screen.width * 0.33f, Screen.height * 0.25f), VictoryMessage);
+				case 1:
+					GUI.DrawTexture(new Rect(10.0f, 125.0f, Screen.width * 0.10f, Screen.height * 0.10f), FragsStar2D[0]);
+				break;
+
+				case 2:
+					GUI.DrawTexture(new Rect(10.0f, 125.0f, Screen.width * 0.10f, Screen.height * 0.10f), FragsStar2D[1]);
+				break;
+
+				case 3:
+					GUI.DrawTexture(new Rect(10.0f, 125.0f, Screen.width * 0.10f, Screen.height * 0.10f), FragsStar2D[2]);
+				break;
+
+				case 4:
+					GUI.DrawTexture(new Rect(10.0f, 125.0f, Screen.width * 0.10f, Screen.height * 0.10f), FragsStar2D[3]);
+				break;
+
+				case 5:
+					GUI.DrawTexture(new Rect(10.0f, 125.0f, Screen.width * 0.10f, Screen.height * 0.10f), FragsStar2D[4]);
+				break;
 			}
+
+			switch(GameObject.Find("PlayerTmp(Clone)").GetComponent<PlayerDatasScript>().NbCollectedFragments)
+			{
+				case 1:
+					GUI.DrawTexture(new Rect(Screen.width * 0.36f, 125.0f, Screen.width * 0.10f, Screen.height * 0.10f), FragsStar2D[0]);
+				break;
+
+				case 2:
+					GUI.DrawTexture(new Rect(Screen.width * 0.36f, 125.0f, Screen.width * 0.10f, Screen.height * 0.10f), FragsStar2D[1]);
+				break;
+
+				case 3:
+					GUI.DrawTexture(new Rect(Screen.width * 0.36f, 125.0f, Screen.width * 0.10f, Screen.height * 0.10f), FragsStar2D[2]);
+				break;
+
+				case 4:
+					GUI.DrawTexture(new Rect(Screen.width * 0.36f, 125.0f, Screen.width * 0.10f, Screen.height * 0.10f), FragsStar2D[3]);
+				break;
+
+				case 5:
+					GUI.DrawTexture(new Rect(Screen.width * 0.36f, 125.0f, Screen.width * 0.10f, Screen.height * 0.10f), FragsStar2D[4]);
+				break;
+			}
+
+			GUI.Box(new Rect(Screen.width * 0.01f, 10, Screen.width * 0.33f, 25), PlayerName); 
+			GUI.Box(new Rect(Screen.width * 0.36f, 10, Screen.width * 0.62f, 25), RedBalls + " red balls | " + YellowBalls + " yellow balls | " + GreenBalls + " green balls"); 
+			GUI.Box(new Rect(10, 38, 60.0f + _healthBarLength, 20), (Health * 100.0f) / MaxHealth + "%");
+
+			GUISkin temp = GUI.skin;
+			GUI.skin = EnemyNameSkin;
+
+			GUI.Box(new Rect(Screen.width * 0.01f, 60.0f, Screen.width * 0.33f, 25), GameObject.Find("PlayerTmp(Clone)").GetComponent<PlayerDatasScript>().PlayerName); 
+
+			GUI.skin = temp;
+
+			GUI.Box(new Rect(Screen.width * 0.36f, 60.0f, Screen.width * 0.62f, 25), GameObject.Find("PlayerTmp(Clone)").GetComponent<PlayerDatasScript>().RedBalls + " red balls | " + GameObject.Find("PlayerTmp(Clone)").GetComponent<PlayerDatasScript>().YellowBalls + " yellow balls | " + GameObject.Find("PlayerTmp(Clone)").GetComponent<PlayerDatasScript>().GreenBalls + " green balls"); 
+			GUI.Box(new Rect(10, 93.0f, 60.0f + _healthBarLength, 20), (GameObject.Find("PlayerTmp(Clone)").GetComponent<PlayerDatasScript>().Health * 100.0f) / GameObject.Find("PlayerTmp(Clone)").GetComponent<PlayerDatasScript>().MaxHealth + "%");
 		}
 	}
-	
+
 	public void AdjustHealth(float health)
 	{
 		Health += health;
@@ -170,41 +207,6 @@ public class PlayerDatasScript : MonoBehaviour
 		if(Health > MaxHealth) { Health = MaxHealth; }
 		if(MaxHealth < 1) { MaxHealth = 1; }
 		_healthBarLength = (Screen.width / 2) * (Health / (float)MaxHealth);
-	}
-
-	[RPC]
-	public void Victory(bool victory)
-	{
-		if(Network.peerType != NetworkPeerType.Server)
-		{
-			ShowMessage = true;
-			PlayingState = false;
-			if(!victory)
-			{
-				VictoryMessage = "CONGRATULATIONS " + PlayerName + ", YOU HAVE WON !!!! ";
-			}
-			else
-			{
-				VictoryMessage = "YOU HAVE LOST, TRY AGAIN ... ";
-				FlyingTrisRun();
-			}
-			Invoke("End", 5.0f);
-		}
-	}
-
-	public void End()
-	{
-		ShowMessage = false;
-		Network.RemoveRPCs(Network.player);
-		Network.DestroyPlayerObjects(Network.player);
-		Network.Disconnect();
-		DestroyImmediate(PersistentLobbyOnload, true);
-		Application.LoadLevel("Menu");
-	}
-
-	void FlyingTrisRun()
-	{
-		GetComponent<FXFlyingTrianglesScript>().Fly();
 	}
 
 	void OnCollisionEnter(Collision col)
@@ -227,6 +229,24 @@ public class PlayerDatasScript : MonoBehaviour
 			{
 				AdjustHealth(-5.0f);
 			}
+		}
+	}
+
+	[RPC]
+	void SynchronizePlayerDatas(string datas)
+	{
+		if(Network.peerType == NetworkPeerType.Client)
+		{
+			PlayerDatasScript otherDatas = GameObject.Find("PlayerTmp(Clone)").GetComponent<PlayerDatasScript>();
+			string[] t_data = datas.Split(new char[] { ';' });
+
+			otherDatas.PlayerName = t_data[0];
+			otherDatas.MaxHealth = float.Parse(t_data[1]);
+			otherDatas.Health = float.Parse(t_data[2]);
+			otherDatas.RedBalls = int.Parse(t_data[3]);
+			otherDatas.YellowBalls = int.Parse(t_data[4]);
+			otherDatas.GreenBalls = int.Parse(t_data[5]);
+			otherDatas.NbCollectedFragments = int.Parse(t_data[6]);
 		}
 	}
 }

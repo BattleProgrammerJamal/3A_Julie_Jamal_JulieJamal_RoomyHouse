@@ -143,7 +143,7 @@ public class GeneralCreateChatBoxScript : MonoBehaviour
 				Message = "";
 			}
 		}
-		
+
 		if(Event.current.type == EventType.Repaint)
 		{
 			_chatBox = new Rect(Screen.width * OffsetX, Screen.height * OffsetY, Screen.width * SizeW, Screen.height * SizeH);

@@ -85,7 +85,7 @@ public class PlayerUiTechnicsScript : MonoBehaviour
 	
 	void OnGUI()
 	{
-		if(PlayerDatasScript.PlayingState)
+		if(PlayerEndOfPartyScript.PlayingState)
 		{
 			GUILayout.BeginArea(new Rect(Screen.width * 0.38f, Screen.height * 0.85f, Screen.width * 0.60f, Screen.height * 0.15f));
 			GUILayout.BeginHorizontal();

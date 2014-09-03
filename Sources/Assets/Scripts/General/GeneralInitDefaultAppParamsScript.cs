@@ -88,6 +88,24 @@ public class GeneralInitDefaultAppParamsScript : MonoBehaviour
 					h = int.Parse(entry.Value);
 					change_size = true;
 				}
+
+				if(entry.Key.Equals("Didactitiel"))
+				{
+					if(entry.Value.Equals("True"))
+					{
+						GeneralCreateMenuGuiScript.Didactitiel = true;
+					}
+					else
+					{
+						GeneralCreateMenuGuiScript.Didactitiel = false;
+					}
+				}
+
+				if(entry.Key.Equals("Chapeaux"))
+				{
+					string[] chapeaux = entry.Value.Split(new char[] { ';' });
+					GeneralCreateMenuGuiScript.Chapeau_Id = int.Parse(chapeaux[0].ToString());
+				}
 			}
 
 			if(change_size)

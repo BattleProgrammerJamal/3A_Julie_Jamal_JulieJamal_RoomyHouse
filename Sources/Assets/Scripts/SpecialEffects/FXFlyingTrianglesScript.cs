@@ -64,8 +64,10 @@ public class FXFlyingTrianglesScript : MonoBehaviour
 
 	void DestroyAfterTimeout()
 	{
-		//Destroy(gameObject);
-		gameObject.SetActive(false);
+		//gameObject.SetActive(false);
+		Color col = gameObject.renderer.material.color;
+		col.a = 0.0f;
+		gameObject.renderer.material.color = col;
 	}
 
 	GameObject[] AddTriangles(GameObject root, Material mat)
