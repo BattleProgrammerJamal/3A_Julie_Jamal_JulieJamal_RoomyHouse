@@ -6,14 +6,6 @@ public class SbireBehaviorScript : MonoBehaviour
 	public enum MinionState { IDLE, FOLLOW, ATTACK, SEARCH };
 	
 	[SerializeField]
-	private GameObject _player;
-	public GameObject Player
-	{
-		get { return _player; }
-		set { _player = value; }
-	}
-	
-	[SerializeField]
 	private MinionState _state = MinionState.IDLE;
 	public MinionState State
 	{
@@ -167,7 +159,7 @@ public class SbireBehaviorScript : MonoBehaviour
 	
 	void Follow()
 	{
-		Agent.SetDestination(Player.transform.position);
+		Agent.SetDestination(NetworkConnectionInitScript.myPlayer.transform.position + Vector3.back * 2.0f * Time.deltaTime);
 	}
 	
 	void Attack()
@@ -181,8 +173,7 @@ public class SbireBehaviorScript : MonoBehaviour
 		GameObject[] greenBalls = GameObject.FindGameObjectsWithTag("GreenSphere");
 		GameObject[] keyFragments = GameObject.FindGameObjectsWithTag("morceau_cle");
 		
-		int l = (redBalls.Length + yellowBalls.Length + greenBalls.Length + keyFragments.Length), i = 0,
-		index = 0;
+		int l = (redBalls.Length + yellowBalls.Length + greenBalls.Length + keyFragments.Length), i = 0, index = 0;
 		GameObject[] objects = new GameObject[l];
 		
 		for(i = 0; i < redBalls.Length; ++i){ objects[index] = redBalls[i]; ++index; }
